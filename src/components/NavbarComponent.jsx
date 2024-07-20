@@ -1,32 +1,35 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const NavbarComponent = () => {
   return (
     <nav className=" w-full h-[50px] bg-background">
       <div className="container h-full mx-auto flex items-center p-5 uppercase font-bold text-sm">
         <div>
-          <a href="/">
-            <h1>Logo</h1>
-          </a>
+          <NavLink to="/">
+            <h1>
+              Prime <span className="underline">Sneaks</span>
+            </h1>
+          </NavLink>
         </div>
         <div className="flex w-[90%] mx-auto">
-          <div className="flex space-x-2">
-            <a href="/">
+          <div className="flex space-x-5">
+            <NavLink to="/">
               <h1>Home</h1>
-            </a>
+            </NavLink>
             <span>|</span>
-            <a href="/shop">
+            <NavLink to="/shop">
               <h1>Shop</h1>
-            </a>
+            </NavLink>
           </div>
-          <div className="flex space-x-2 ms-auto">
-            <a href="/">
+          <div className="flex space-x-5 ms-auto">
+            <NavLink to="/register">
               <h1>Register</h1>
-            </a>
+            </NavLink>
             <span>|</span>
-            <a href="/">
+            <NavLink to="/login">
               <h1>Login</h1>
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>

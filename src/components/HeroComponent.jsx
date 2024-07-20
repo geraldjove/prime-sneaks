@@ -1,40 +1,58 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import shoesData from "../../api.json";
 
-console.log(shoesData);
-
 const Hero = () => {
+  const [shoes, setShoes] = useState([]);
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    setShoes(shoesData.sneakers.map((shoe) => shoe));
+  }, []);
+
+  const handleNext = () => {
+    setVal((prevVal) => (prevVal < shoes.length - 1 ? prevVal + 1 : 0));
+  };
+
+  const handlePrevious = () => {
+    setVal((prevVal) => (prevVal > 0 ? prevVal - 1 : shoes.length - 1));
+  };
+
   return (
-    <>
-      <section className="min-h-[100vh] bg-background flex justify-center items-center">
-        <div className="container mx-auto flex justify-center items-center">
-          <div className="text-3xl text-gray-200 me-auto">
+    <section className="min-h-[100vh] bg-background flex justify-center items-center overflow-hidden">
+      <div className="container mx-auto flex justify-center items-center">
+        <div className="sm:text-3xl text-gray-200 me-auto">
+          <button onClick={handlePrevious}>
             <FaArrowAltCircleLeft />
-          </div>
-          <div>
-            <div className=" flex justify-start items-center">
-              <div className="relative ">
-                <h1 className="text-[15em] font-black">sneaker</h1>
-              </div>
-              <div className=" absolute">
+          </button>
+        </div>
+        <div>
+          <div className="flex justify-start items-center">
+            <div className="relative">
+              <h1 className="sm:text-[15em] font-black">sneaker</h1>
+            </div>
+            <div className="sm:absolute">
+              {shoes.slice(val, val + 1).map((shoe) => (
                 <img
-                  src="https://png.pngtree.com/png-vector/20240125/ourmid/pngtree-white-sneaker-png-file-png-image_11492156.png"
+                  key={shoe.id}
+                  src={shoe.main_picture_url}
                   alt="shop"
-                  className="min-w-[850px] rotate-[-30deg] drop-shadow-xl z-10"
+                  className="rotate-[-30deg] scale-x-[-1] drop-shadow-xl z-10"
                 />
-              </div>
-              <div className="z-20 absolute">
-                <h1 className="text-[15em] text-cyan-600 font-black">snea.</h1>
-              </div>
+              ))}
+            </div>
+            <div className="z-20 absolute">
+              <h1 className="sm:text-[15em] text-cyan-600 font-black">snea.</h1>
             </div>
           </div>
-          <div className="text-3xl text-gray-200 ms-auto">
-            <FaArrowAltCircleRight />
-          </div>
         </div>
-      </section>
-    </>
+        <div className="sm:text-3xl text-gray-200 ms-auto">
+          <button onClick={handleNext}>
+            <FaArrowAltCircleRight />
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 

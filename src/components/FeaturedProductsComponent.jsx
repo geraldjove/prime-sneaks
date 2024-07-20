@@ -5,8 +5,8 @@ const FeaturedProductsComponent = () => {
   return (
     <>
       <section className="container mx-auto">
-        <div className="flex justify-center items-center gap-4">
-          <ProductCardComponent limit={5} />
+        <div className="grid sm:grid-cols-4 gap-4">
+          <ProductCardComponent limit={4} />
         </div>
       </section>
     </>
