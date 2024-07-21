@@ -19,19 +19,19 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-[100vh] bg-background flex justify-center items-center overflow-hidden">
+    <section className="min-h-[100vh] bg-background flex justify-center items-center">
       <div className="container mx-auto flex justify-center items-center">
         <div className="sm:text-3xl text-gray-200 me-auto">
-          <button onClick={handlePrevious}>
+          <button onClick={handlePrevious} className="sm:block hidden">
             <FaArrowAltCircleLeft />
           </button>
         </div>
         <div>
           <div className="flex justify-start items-center">
             <div className="relative">
-              <h1 className="sm:text-[15em] font-black">sneaker</h1>
+              <h1 className="sm:text-[15em] text-[5rem] font-black">sneaker</h1>
             </div>
-            <div className="sm:absolute">
+            <div className="sm:absolute sm:block hidden">
               {shoes.slice(val, val + 1).map((shoe) => (
                 <img
                   key={shoe.id}
@@ -42,13 +42,15 @@ const Hero = () => {
               ))}
             </div>
             <div className="z-20 absolute">
-              <h1 className="sm:text-[15em] text-cyan-600 font-black">snea.</h1>
+              <h1 className="sm:text-[15em] sm:block hidden text-cyan-600 font-black">
+                snea.
+              </h1>
             </div>
           </div>
         </div>
         <div className="sm:text-3xl text-gray-200 ms-auto">
           <button onClick={handleNext}>
-            <FaArrowAltCircleRight />
+            <FaArrowAltCircleRight className="sm:block hidden" />
           </button>
         </div>
       </div>

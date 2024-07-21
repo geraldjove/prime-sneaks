@@ -7,7 +7,6 @@ import FooterComponent from "./components/FooterComponent";
 import ProductPage from "./pages/ProductPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import AddToCartPage from "./pages/AddToCartPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import shoesData from "../api.json";
 
@@ -26,20 +25,13 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ProductsPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
           {shoes.map((shoe, index) => (
             <Route
               path={`/shop/${index}`}
               key={index}
               element={<ProductPage shoe={shoe} index={index} />}
-            />
-          ))}
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          {shoes.map((shoe, index) => (
-            <Route
-              path={`/add-to-cart/${index}`}
-              key={index}
-              element={<AddToCartPage shoe={shoe} index={index} />}
             />
           ))}
           <Route path="*" element={<NotFoundPage />} />

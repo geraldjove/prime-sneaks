@@ -27,8 +27,8 @@ const ProductPage = ({ shoe, index }) => {
               <div className="uppercase font-bold">size</div>
               <div className="uppercase font-bold">
                 <select>
-                  {shoe.size_range.map((range) => (
-                    <option>{range}</option>
+                  {shoe.size_range.map((range, index) => (
+                    <option key={index}>{range}</option>
                   ))}
                 </select>
               </div>
