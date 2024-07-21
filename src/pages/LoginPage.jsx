@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-const RegisterPage = () => {
+const LoginPage = ({ onLogin }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkboxTnC, setCheckboxTnC] = useState(false);
 
-  const handleSubmit = () => {
-    console.log("Test Click");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin(true);
+    Swal.fire({
+      title: "Logged in Successfully",
+      text: "Welcome",
+      icon: "success",
+    });
+    navigate("/");
   };
 
   return (
@@ -75,4 +86,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

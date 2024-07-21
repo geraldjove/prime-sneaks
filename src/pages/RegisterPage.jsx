@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
+import Swal from "sweetalert2";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,8 +9,13 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [checkboxTnC, setCheckboxTnC] = useState(false);
 
-  const handleSubmit = () => {
-    console.log("Test Click");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      title: "Success",
+      text: "Welcome",
+      icon: "success",
+    });
   };
 
   return (
@@ -89,6 +95,7 @@ const RegisterPage = () => {
                   name="checkboxTnC"
                   id="checkboxTnC"
                   value={checkboxTnC}
+                  required
                   onChange={(e) => setCheckboxTnC(e.target.value)}
                 />
                 <p>I accept the Terms and Conditions</p>

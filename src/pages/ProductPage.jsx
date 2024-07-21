@@ -46,7 +46,7 @@ const ProductPage = ({ shoe, index }) => {
               <div className="uppercase font-bold">color</div>
               <div>{shoe.color}</div>
             </div>
-            <a href={`/add-to-cart/${index}`}>
+            <a href={`/cart`}>
               <button className="bg-black text-white p-3 px-5">
                 Add to Cart
               </button>

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { FaCartShopping } from "react-icons/fa6";
+import { FaShoppingCart } from "react-icons/fa";
 
-const NavbarComponent = () => {
+const NavbarComponent = ({ isLogged, isAdmin }) => {
   return (
     <nav className=" w-full h-[50px] bg-background">
       <div className="container h-full mx-auto flex items-center uppercase font-bold text-sm">
@@ -22,15 +24,49 @@ const NavbarComponent = () => {
               <h1>Shop</h1>
             </NavLink>
           </div>
-          <div className="flex space-x-5 ms-auto">
-            <NavLink to="/register">
-              <h1>Register</h1>
-            </NavLink>
-            <span>|</span>
-            <NavLink to="/login">
-              <h1>Login</h1>
-            </NavLink>
-          </div>
+          {isLogged ? (
+            <div className="flex space-x-5 ms-auto">
+              {isAdmin ? (
+                <>
+                  <NavLink to="/admin-dashboard">
+                    <h1>Admin Dashboard</h1>
+                  </NavLink>
+                  <span>|</span>
+                </>
+              ) : (
+                <></>
+              )}
+
+              <NavLink to="/profile">
+                <h1>Your Profile</h1>
+              </NavLink>
+              <span>|</span>
+              <NavLink
+                to="/cart"
+                className="flex justify-center items-center gap-2"
+              >
+                <FaShoppingCart />
+                <h3>Cart</h3>
+              </NavLink>
+            </div>
+          ) : (
+            <div className="flex space-x-5 ms-auto">
+              <NavLink to="/register">
+                <h1>Register</h1>
+              </NavLink>
+              <span>|</span>
+              <NavLink to="/login">
+                <h1>Login</h1>
+              </NavLink>
+              <NavLink
+                to="/cart"
+                className="flex justify-center items-center gap-2"
+              >
+                <FaShoppingCart />
+                <h3>Cart</h3>
+              </NavLink>
+            </div>
+          )}
         </div>
       </div>
     </nav>
