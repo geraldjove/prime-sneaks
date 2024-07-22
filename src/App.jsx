@@ -12,69 +12,77 @@ import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import shoesData from "../api.json";
+import { UserProvider } from "./UserContext";
 
 const App = () => {
   const [shoes, setShoes] = useState([]);
-  const [isLogged, setIsLogged] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState({ id: null, isAdmin: null });
 
-  const handleLogin = (credentials) => {
-    if (credentials === true) {
-      setIsLogged(true);
-      setIsAdmin(true);
-    } else if (credentials === false) {
-      setIsLogged(false);
-      setIsAdmin(false);
-    } else {
-      console.log("error");
-    }
-    console.log(typeof credentials);
+  const unsetUser = () => {
+    localStorage.clear();
   };
+
+  useEffect(() => {
+    console.log("State: ");
+    console.log(user); // checks the state
+    console.log("Local storage");
+    console.log(localStorage); // checks the localStorage
+  }, [user]);
 
   useEffect(() => {
     setShoes(shoesData.sneakers.map((shoe) => shoe));
   }, []);
 
-  console.log(shoes);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiUrl = "http://localhost:4000";
+        const response = await fetch(`${apiUrl}/users/details`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        });
+        const data = await response.json();
+        if (data) {
+          setUser({
+            id: data.result.id,
+            email: data.result.contactEmail,
+            isAdmin: data.result.isAdmin,
+          });
+        } else {
+          setUser({
+            id: null,
+            email: null,
+            isAdmin: null,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
-      <Router>
-        <NavbarComponent isLogged={isLogged} isAdmin={isAdmin} />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ProductsPage />} />
-          {shoes.map((shoe, index) => (
-            <Route
-              path={`/shop/${index}`}
-              key={index}
-              element={<ProductPage shoe={shoe} index={index} />}
-            />
-          ))}
-          {isLogged ? (
-            <>
-              <Route
-                path="/profile"
-                element={<ProfilePage onLogin={handleLogin} />}
-              />
-              <Route
-                path="/admin-dashboard"
-                element={<AdminPage shoes={shoes} onLogin={handleLogin} />}
-              />
-            </>
-          ) : (
-            <>
-              <Route path="/register" element={<RegisterPage />} />
-              <Route
-                path="/login"
-                element={<LoginPage onLogin={handleLogin} />}
-              />
-            </>
-          )}
-          <Route path="/cart" element={<CartPage shoes={shoes} />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <FooterComponent />
-      </Router>
+      <UserProvider value={{ user, setUser, unsetUser, shoes }}>
+        <Router>
+          <NavbarComponent />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/shop" element={<ProductsPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/admin-dashboard" element={<AdminPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/shop/:id" element={<ProductPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          <FooterComponent />
+        </Router>
+      </UserProvider>
     </>
   );
 };

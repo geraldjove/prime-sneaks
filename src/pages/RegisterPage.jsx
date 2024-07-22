@@ -6,7 +6,11 @@ const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactAddress, setContactAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [checkboxTnC, setCheckboxTnC] = useState(false);
 
   const handleSubmit = (e) => {
@@ -22,7 +26,7 @@ const RegisterPage = () => {
     <>
       <SectionComponent>
         <div className="flex justify-center items-center">
-          <div className="max-w-[500px] mx-auto bg-gray-300 p-6 space-y-4 md:space-y-6 sm:p-8 rounded-md">
+          <div className="max-w-[500px] mx-auto bg-white p-6 space-y-4 md:space-y-6 sm:p-8 rounded-md">
             <h1 className="text-black font-black text-3xl">
               Create an account
             </h1>
@@ -37,7 +41,7 @@ const RegisterPage = () => {
                     placeholder="John"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="block w-full rounded-md py-1 px-2"
+                    className="block w-full rounded-md py-1 px-2 bg-gray-200"
                   />
                 </div>
                 <div className="w-full">
@@ -49,9 +53,47 @@ const RegisterPage = () => {
                     placeholder="Doe"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="block w-full rounded-md py-1 px-2"
+                    className="block w-full rounded-md py-1 px-2 bg-gray-200"
                   />
                 </div>
+              </div>
+              <div className="sm:flex gap-4">
+                <div className="w-full">
+                  <label htmlFor="firstName">Birth Date</label>
+                  <input
+                    type="date"
+                    name="firstName"
+                    id="firstName"
+                    placeholder="John"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="block w-full rounded-md py-1 px-2 bg-gray-200"
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="firstName">Mobile No.</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    id="lastName"
+                    placeholder="Doe"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="block w-full rounded-md py-1 px-2 bg-gray-200"
+                  />
+                </div>
+              </div>
+              <div className="w-full">
+                <label htmlFor="firstName">Address</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="John"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="block w-full rounded-md py-1 px-2 bg-gray-200"
+                />
               </div>
               <div className="flex flex-col justify-center">
                 <label>Your email</label>
@@ -62,7 +104,7 @@ const RegisterPage = () => {
                   placeholder="name@company.com"
                   value={contactEmail}
                   onChange={(e) => setContactEmail(e.target.value)}
-                  className="block rounded-md py-1 px-2"
+                  className="block rounded-md py-1 px-2 bg-gray-200"
                 />
               </div>
               <div className="flex flex-col justify-center">
@@ -74,7 +116,7 @@ const RegisterPage = () => {
                   placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block rounded-md py-1 px-2"
+                  className="block rounded-md py-1 px-2 bg-gray-200"
                 />
               </div>
               <div className="flex flex-col justify-center">
@@ -86,7 +128,7 @@ const RegisterPage = () => {
                   placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block rounded-md py-1 px-2"
+                  className="block rounded-md py-1 px-2 bg-gray-200"
                 />
               </div>
               <div className="flex gap-5">
