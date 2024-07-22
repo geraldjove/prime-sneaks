@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
+import UserContext from "../UserContext";
 
-const NavbarComponent = ({ isLogged, isAdmin }) => {
+const NavbarComponent = () => {
+  const { user, unsetUser } = useContext(UserContext);
+
   return (
     <nav className=" w-full h-[50px] bg-background">
       <div className="container h-full mx-auto flex items-center uppercase font-bold text-sm">
@@ -14,7 +17,7 @@ const NavbarComponent = ({ isLogged, isAdmin }) => {
             </h1>
           </NavLink>
         </div>
-        <div className="flex w-[90%] mx-auto">
+        <div className="sm:flex hidden w-[90%] mx-auto">
           <div className="flex space-x-5">
             <NavLink to="/">
               <h1>Home</h1>
@@ -24,9 +27,9 @@ const NavbarComponent = ({ isLogged, isAdmin }) => {
               <h1>Shop</h1>
             </NavLink>
           </div>
-          {isLogged ? (
+          {user.id != null || user.id != undefined ? (
             <div className="flex space-x-5 ms-auto">
-              {isAdmin ? (
+              {user.isAdmin === true ? (
                 <>
                   <NavLink to="/admin-dashboard">
                     <h1>Admin Dashboard</h1>

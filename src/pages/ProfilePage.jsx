@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
 import ProductCardComponent from "../components/ProductCardComponent";
 import LogOutComponent from "../components/LogOutComponent";
 
-const ProfilePage = ({ onLogin }) => {
+const ProfilePage = () => {
   return (
     <SectionComponent>
       <div className="grid sm:grid-cols-[70%_28%] gap-4">
@@ -29,7 +29,7 @@ const ProfilePage = ({ onLogin }) => {
               <button className="bg-blue-500 block w-full p-2 text-white">
                 Change Password
               </button>
-              <LogOutComponent onLogin={onLogin} />
+              <LogOutComponent />
               <p className="text-red-500 text-sm">Delete account</p>
             </div>
           </div>

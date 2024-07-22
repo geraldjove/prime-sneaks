@@ -11,7 +11,7 @@ const ProductCardComponent = ({ limit }) => {
   return shoes.slice(0, limit || shoes.length).map((shoe, index) => (
     <div
       key={index}
-      className="border-2 max-w-full min-h-full rounded-lg p-2 flex flex-col justify-center items-center"
+      className="border-2 max-w-full bg-white min-h-full rounded-lg p-2 flex flex-col justify-center items-center"
     >
       <div className="min-h-[150px] bg-white flex justify-center">
         <img src={shoe.grid_picture_url} className="w-[100vh]" />
