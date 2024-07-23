@@ -11,7 +11,6 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import shoesData from "../api.json";
 import { UserProvider } from "./UserContext";
 
 const App = () => {
@@ -25,8 +24,16 @@ const App = () => {
   // Shoes
 
   useEffect(() => {
-    setShoes(shoesData);
-    console.log("This is shoe data ", shoesData);
+    const fetchData = async () => {
+      const fetchShoesData = await fetch("http://localhost:8000/sneakers");
+      const data = await fetchShoesData.json();
+      if (data) {
+        setShoes(data);
+      } else {
+        console.log("Error fetching data");
+      }
+    };
+    fetchData();
   }, []);
 
   // Users
@@ -61,12 +68,13 @@ const App = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log("State: ");
-    console.log(user); // checks the state
-    console.log("Local storage");
-    console.log(localStorage); // checks the localStorage
-  }, [user]); // Log state changes
+  // useEffect(() => {
+  //   console.log("State: ");
+  //   console.log(user); // checks the state
+  //   console.log(shoes);
+  //   console.log("Local storage");
+  //   console.log(localStorage); // checks the localStorage
+  // }, [user, shoes]); // Log state changes
 
   return (
     <>

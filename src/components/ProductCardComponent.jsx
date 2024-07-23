@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
-import shoeData from "../../api.json";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import UserContext from "../UserContext";
 
 const ProductCardComponent = ({ limit }) => {
-  const [shoes, setShoes] = useState([]);
+  const { id } = useParams();
+  const { shoes } = useContext(UserContext);
 
   useEffect(() => {
-    setShoes(shoeData.sneakers.map((shoe) => shoe));
+    shoes.find((shoe) => shoe.id === id);
   }, []);
 
   return shoes.slice(0, limit || shoes.length).map((shoe, index) => (
@@ -21,7 +23,7 @@ const ProductCardComponent = ({ limit }) => {
           {shoe.name}
         </h3>
         <h3>${shoe.retail_price_cents / 100}</h3>
-        <a href={`/shop/${index}`}>
+        <a href={`/shop/${shoe.id}`}>
           <button className="p-3 bg-blue-500 rounded-lg text-white uppercase font-bold text-sm">
             Go To Product
           </button>

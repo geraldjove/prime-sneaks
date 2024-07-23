@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { FaCartShopping } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import UserContext from "../UserContext";
 

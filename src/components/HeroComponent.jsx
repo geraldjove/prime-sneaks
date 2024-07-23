@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
-import shoesData from "../../api.json";
+import UserContext from "../UserContext";
 
 const Hero = () => {
-  const [shoes, setShoes] = useState([]);
+  const { shoes } = useContext(UserContext);
   const [val, setVal] = useState(0);
 
   useEffect(() => {
-    setShoes(shoesData.sneakers.map((shoe) => shoe));
+    shoes.map((shoe) => shoe);
   }, []);
 
   const handleNext = () => {
