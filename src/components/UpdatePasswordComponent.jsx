@@ -53,19 +53,16 @@ const UpdatePasswordComponent = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/users/update/${user.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-          body: JSON.stringify({
-            password: newPassword,
-          }),
-        }
-      );
+      const response = await fetch(`http://localhost:4000/users/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+        body: JSON.stringify({
+          password: newPassword,
+        }),
+      });
 
       if (!response.ok) {
         // Handle server errors
@@ -103,7 +100,7 @@ const UpdatePasswordComponent = () => {
         <div className="w-full">
           <label htmlFor="newPassword">New Password</label>
           <input
-            type="text"
+            type="password"
             name="newPassword"
             id="newPassword"
             value={newPassword}
@@ -114,7 +111,7 @@ const UpdatePasswordComponent = () => {
         <div className="flex flex-col justify-center">
           <label>Confirm Password</label>
           <input
-            type="text"
+            type="password"
             name="confirmNewPass"
             id="confirmNewPass"
             value={confirmNewPass}

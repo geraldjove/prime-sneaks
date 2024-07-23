@@ -58,7 +58,7 @@ const LoginPage = () => {
           title: "Success!",
           text: data.message,
         }).then(() => {
-          navigate("/profile");
+          navigate("/");
         });
       } else {
         Swal.fire("Error", data.message || "Login failed", "error");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import NavbarComponent from "./components/NavbarComponent";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import UpdatePage from "./pages/UpdatePage";
 import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 import AdminPage from "./pages/AdminPage";
+import AdminUpdatePage from "./pages/AdminUpdatePage";
 import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { UserProvider } from "./UserContext";
@@ -18,6 +19,7 @@ import { UserProvider } from "./UserContext";
 const App = () => {
   const [shoes, setShoes] = useState([]);
   const [user, setUser] = useState({ id: null, isAdmin: null });
+  const navigate = useNavigate();
 
   const unsetUser = () => {
     localStorage.clear();
@@ -70,43 +72,63 @@ const App = () => {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("State: ");
-  //   console.log(user); // checks the state
-  //   console.log(shoes);
-  //   console.log("Local storage");
-  //   console.log(localStorage); // checks the localStorage
-  // }, [user, shoes]); // Log state changes
+  // Delete User
+  const deleteUser = async () => {
+    const userConfirmed = window.confirm(
+      "Do you want to permanently delete this account?"
+    );
+
+    if (userConfirmed) {
+      const response = await fetch(`http://localhost:4000/users/${user.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      });
+      if (response) {
+        alert("Successfully Delete Account", navigate("/login"));
+        unsetUser();
+      } else {
+        alert("Error Deleting Account");
+      }
+    } else {
+      console.log("Cancelled Action");
+    }
+  };
 
   return (
     <>
-      <UserProvider value={{ user, setUser, unsetUser, shoes }}>
-        <Router>
-          <NavbarComponent />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/shop" element={<ProductsPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/shop/:id" element={<ProductPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-            {user.id !== null && (
-              <>
-                {user.isAdmin && (
+      <UserProvider value={{ user, setUser, unsetUser, shoes, deleteUser }}>
+        <NavbarComponent />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ProductsPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/shop/:id" element={<ProductPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+          {user.id !== null && (
+            <>
+              {user.isAdmin && (
+                <>
                   <Route path="/admin-dashboard" element={<AdminPage />} />
-                )}
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/profile/update/:id" element={<UpdatePage />} />
-                <Route
-                  path="/profile/update/password/:id"
-                  element={<UpdatePasswordPage />}
-                />
-              </>
-            )}
-          </Routes>
-          <FooterComponent />
-        </Router>
+                  <Route
+                    path="/profile/admin-update/:id"
+                    element={<AdminUpdatePage />}
+                  />
+                </>
+              )}
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/update/:id" element={<UpdatePage />} />
+              <Route
+                path="/profile/update/password/:id"
+                element={<UpdatePasswordPage />}
+              />
+            </>
+          )}
+        </Routes>
+        <FooterComponent />
       </UserProvider>
     </>
   );

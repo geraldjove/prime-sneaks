@@ -9,10 +9,15 @@ const LogoutComponent = () => {
   const navigate = useNavigate();
 
   const logOutClick = () => {
-    unsetUser();
-    setUser({ id: null, isAdmin: null });
-    navigate("/login");
-    console.log("testing");
+    const userConfirmed = window.confirm("Do you want to logout?");
+    if (userConfirmed) {
+      unsetUser();
+      setUser({ id: null, isAdmin: null });
+
+      navigate("/login");
+    } else {
+      console.log("cancelled");
+    }
   };
 
   return (

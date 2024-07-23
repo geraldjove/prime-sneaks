@@ -1,25 +1,73 @@
 import React, { useState, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [contactAddress, setContactAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkboxTnC, setCheckboxTnC] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    Swal.fire({
-      title: "Success",
-      text: "Welcome",
-      icon: "success",
-    });
+
+    if (
+      password !== (null || undefined || "") &&
+      confirmPassword !== (null || undefined || "")
+    ) {
+      if (password === confirmPassword) {
+        const response = await fetch("http://localhost:4000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            contactEmail,
+            contactPhone,
+            contactAddress,
+            password,
+            birthDate,
+          }),
+        });
+        if (response) {
+          Swal.fire({
+            title: "Success",
+            text: "Welcome",
+            icon: "success",
+          }).then(() => {
+            navigate("/login");
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Error creating user",
+            icon: "error",
+          });
+        }
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "Password mismatch",
+          icon: "error",
+        });
+      }
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: "Password required",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -121,11 +169,11 @@ const RegisterPage = () => {
                 <label>Confirm password</label>
                 <input
                   type="password"
-                  name="password"
-                  id="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
                   placeholder="********"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className="block rounded-md py-1 px-2 bg-gray-200"
                 />
               </div>
