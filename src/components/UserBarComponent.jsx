@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const UserBarComponent = () => {
+const UserBarComponent = ({ user }) => {
   return (
     <>
       <div className=" w-full min-h-[50px] max-h-full border border-white rounded-md">
@@ -12,16 +12,16 @@ const UserBarComponent = () => {
             />
           </div>
           <div className=" min-h-[50px] flex justify-center items-center ">
-            <h3 className="text-center">User Name</h3>
+            <h3 className="text-center">{`${user.firstName} ${user.lastName}`}</h3>
           </div>
           <div className=" min-h-[50px] flex justify-center items-center">
-            <h3 className="text-center">Email Address</h3>
+            <h3 className="text-center">{user.contactEmail}</h3>
           </div>
           <div className=" min-h-[50px] flex justify-center items-center">
-            <h3 className="text-center">Contact Phone</h3>
+            <h3 className="text-center">{user.contactPhone}</h3>
           </div>
           <div className=" min-h-[50px] flex justify-center items-center">
-            <h3 className="text-center">Address</h3>
+            <h3 className="text-center">{user.contactAddress}</h3>
           </div>
           <div className=" min-h-[50px] flex justify-center items-center gap-4">
             <button className="bg-blue-500 p-2">Update</button>

@@ -10,18 +10,22 @@ const NavbarComponent = () => {
   useEffect(() => {
     const apiUrl = "http://localhost:4000";
     const fetchUserDetails = async () => {
-      const userDetails = await fetch(`${apiUrl}/users/details`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      });
+      try {
+        const userDetails = await fetch(`${apiUrl}/users/details`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        });
 
-      const data = await userDetails.json();
+        const data = await userDetails.json();
 
-      if (data) {
-        setFirstName(data.result.firstName);
-      } else {
-        console.log("error");
+        if (data) {
+          setFirstName(data.result.firstName);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.error("Error ", error);
       }
     };
     fetchUserDetails();

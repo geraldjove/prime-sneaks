@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import UserContext from "../UserContext";
+import StarRatingComponent from "./StarRatingComponent";
 
 const ProductCardComponent = ({ limit }) => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const ProductCardComponent = ({ limit }) => {
 
   return shoes.slice(0, limit || shoes.length).map((shoe, index) => (
     <div
-      key={index}
+      key={shoe.id}
       className="border-2 max-w-full bg-white min-h-full rounded-lg p-2 flex flex-col justify-center items-center"
     >
       <div className="min-h-[150px] bg-white flex justify-center">
@@ -22,12 +23,17 @@ const ProductCardComponent = ({ limit }) => {
         <h3 className="sm:text-md text-center font-bold my-auto">
           {shoe.name}
         </h3>
+        <div>
+          <StarRatingComponent
+            rating={Math.floor(shoe.retail_price_cents / 5000)}
+          />
+        </div>
         <h3>${shoe.retail_price_cents / 100}</h3>
-        <a href={`/shop/${shoe.id}`}>
-          <button className="p-3 bg-blue-500 rounded-lg text-white uppercase font-bold text-sm">
+        <Link to={`/shop/${shoe.id}`}>
+          <button className="p-2 bg-blue-500 rounded-lg text-white uppercase font-bold text-sm">
             Go To Product
           </button>
-        </a>
+        </Link>
       </div>
     </div>
   ));

@@ -8,6 +8,8 @@ import ProductPage from "./pages/ProductPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
+import UpdatePage from "./pages/UpdatePage";
+import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -87,10 +89,21 @@ const App = () => {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/admin-dashboard" element={<AdminPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/shop/:id" element={<ProductPage />} />
             <Route path="*" element={<NotFoundPage />} />
+            {user.id !== null && (
+              <>
+                {user.isAdmin && (
+                  <Route path="/admin-dashboard" element={<AdminPage />} />
+                )}
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/update/:id" element={<UpdatePage />} />
+                <Route
+                  path="/profile/update/password/:id"
+                  element={<UpdatePasswordPage />}
+                />
+              </>
+            )}
           </Routes>
           <FooterComponent />
         </Router>

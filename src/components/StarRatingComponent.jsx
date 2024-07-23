@@ -1,27 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import UserContext from "../UserContext";
+import { FaS } from "react-icons/fa6";
 
-const StarRatingComponent = () => {
-  const { id } = useParams();
-  const { shoes } = useContext(UserContext);
-  const [rating, setRating] = useState(0);
-
-  useEffect(() => {
-    if (shoes && shoes.length > 0) {
-      const shoe = shoes.find((shoe) => shoe.id === id);
-      if (shoe) {
-        setRating(shoe.retail_price_cents);
+const StarRatingComponent = ({ rating }) => {
+  const ratingStars = (rating) => {
+    const stars = [];
+    const maxRating = 5;
+    for (let i = 0; i < maxRating; i++) {
+      if (rating > i) {
+        stars.push(<FaStar className="text-yellow-500" key={i} />);
       } else {
-        console.error("Error getting ratings: Shoe not found");
+        stars.push(<FaStar className="text-gray-500" key={i} />);
       }
     }
-  }, [shoes, id]);
-  console.log(rating);
+    return <div className="flex">{stars}</div>;
+  };
   return (
     <>
-      <h1>{rating}</h1>
+      <h1>{ratingStars(rating)}</h1>
     </>
   );
 };

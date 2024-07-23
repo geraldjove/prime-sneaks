@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import shoeData from "../../api.json";
+import React, { useState, useEffect, useContext } from "react";
 
 const ProductCardSmallComponent = ({ limit }) => {
   const [shoes, setShoes] = useState([]);

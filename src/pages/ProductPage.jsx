@@ -16,6 +16,7 @@ const ProductPage = () => {
   const [size, setSize] = useState([]);
   const [price, setPrice] = useState("");
   const [color, setColor] = useState("");
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     if (shoes && shoes.length > 0) {
@@ -29,6 +30,7 @@ const ProductPage = () => {
         setSize(shoe.size_range);
         setPrice(shoe.retail_price_cents / 100);
         setColor(shoe.color);
+        setRating(Math.floor(shoe.retail_price_cents / 5000));
       }
     }
   }, [shoes, id, designer, description, image, size, price, color]);
@@ -45,12 +47,9 @@ const ProductPage = () => {
           </div>
           <div className="min-h-50px p-5 col-span-3 flex flex-col justify-center items-center">
             <img src={image} className="w-[full] drop-shadow-lg" />
-            <div className=" bg-gray-300 rounded-md w-full min-h-[100px] flex justify-center items-center">
-              Placeholder for ProductPage shoe color component
-            </div>
           </div>
           <div className=" min-h-50px flex flex-col items-center space-y-10">
-            <div className="grid sm:grid-cols-2 w-full place-items-center gap-5">
+            <div className="grid grid-cols-2 w-full place-items-center gap-5">
               <div className="uppercase font-bold">size</div>
               <div className="uppercase font-bold">
                 <select>
@@ -62,7 +61,7 @@ const ProductPage = () => {
 
               <div className="uppercase font-bold">reviews</div>
               <div className="flex">
-                <StarRatingComponent />
+                <StarRatingComponent rating={rating} />
               </div>
               <div className="uppercase font-bold">price</div>
               <div>${price}</div>

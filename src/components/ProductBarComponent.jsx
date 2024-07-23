@@ -11,7 +11,7 @@ const ProductBarComponent = ({ shoe, index }) => {
             <img src={shoe.grid_picture_url} className="h-[50px]" />
           </div>
           <div className=" min-h-[50px] mx-auto flex justify-center items-center">
-            <Link to={`/shop/${index}`} className="flex gap-2 items-center">
+            <Link to={`/shop/${shoe.id}`} className="flex gap-2 items-center">
               <FaEye />
               <h3>View</h3>
             </Link>

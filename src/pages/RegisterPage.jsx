@@ -45,7 +45,7 @@ const RegisterPage = () => {
                   />
                 </div>
                 <div className="w-full">
-                  <label htmlFor="firstName">Last Name</label>
+                  <label htmlFor="lastName">Last Name</label>
                   <input
                     type="text"
                     name="lastName"
@@ -59,39 +59,37 @@ const RegisterPage = () => {
               </div>
               <div className="sm:flex gap-4">
                 <div className="w-full">
-                  <label htmlFor="firstName">Birth Date</label>
+                  <label htmlFor="birthDate">Birth Date</label>
                   <input
                     type="date"
-                    name="firstName"
-                    id="firstName"
-                    placeholder="John"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    name="birthDate"
+                    id="birthDate"
+                    value={birthDate}
+                    onChange={(e) => setBirthDate(e.target.value)}
                     className="block w-full rounded-md py-1 px-2 bg-gray-200"
                   />
                 </div>
                 <div className="w-full">
-                  <label htmlFor="firstName">Mobile No.</label>
+                  <label htmlFor="contactPhone">Mobile No.</label>
                   <input
                     type="text"
-                    name="lastName"
-                    id="lastName"
-                    placeholder="Doe"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    name="contactPhone"
+                    id="contactPhone"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
                     className="block w-full rounded-md py-1 px-2 bg-gray-200"
                   />
                 </div>
               </div>
               <div className="w-full">
-                <label htmlFor="firstName">Address</label>
+                <label htmlFor="contactAddress">Address</label>
                 <input
                   type="text"
-                  name="firstName"
-                  id="firstName"
-                  placeholder="John"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  name="contactAddress"
+                  id="contactAddress"
+                  placeholder="Subdv, Street, City, Country"
+                  value={contactAddress}
+                  onChange={(e) => setContactAddress(e.target.value)}
                   className="block w-full rounded-md py-1 px-2 bg-gray-200"
                 />
               </div>
