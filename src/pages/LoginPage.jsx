@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [contactEmail, setContactEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkboxTnC, setCheckboxTnC] = useState(false);
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(false); // Default to false
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -19,6 +19,27 @@ const LoginPage = () => {
       setIsActive(false);
     }
   }, [contactEmail, password]);
+
+  const retrieveUserDetails = async (token) => {
+    try {
+      const apiUrl = "http://localhost:4000";
+      const response = await fetch(`${apiUrl}/users/details`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (data) {
+        setUser({
+          id: data.result.id,
+          isAdmin: data.result.isAdmin,
+        });
+      }
+    } catch (error) {
+      console.error("Error retrieving user details:", error);
+    }
+  };
 
   const authenticate = async (e) => {
     e.preventDefault();
@@ -37,18 +58,16 @@ const LoginPage = () => {
       });
 
       const data = await response.json();
-      console.log(data.auth);
 
       if (data.auth) {
         localStorage.setItem("access", data.auth);
-        retrieveUserDetails(data.auth);
+        await retrieveUserDetails(data.auth); // Ensure to await this
         Swal.fire({
           icon: "success",
           title: "Success!",
           text: data.message,
-          preConfirm: () => {
-            navigate("/");
-          },
+        }).then(() => {
+          navigate("/shop");
         });
       } else {
         Swal.fire("Error", data.message || "Login failed", "error");
@@ -56,23 +75,6 @@ const LoginPage = () => {
     } catch (error) {
       console.error("Error during authentication:", error);
       Swal.fire("Error", "An error occurred during authentication.", "error");
-    }
-  };
-
-  const retrieveUserDetails = async (token) => {
-    const apiUrl = "http://localhost:4000";
-    const fetchData = await fetch(`${apiUrl}/users/details`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await fetchData.json();
-
-    if (data) {
-      setUser({
-        id: data.result.id,
-        isAdmin: data.result.isAdmin,
-      });
     }
   };
 

@@ -20,19 +20,16 @@ const App = () => {
 
   const unsetUser = () => {
     localStorage.clear();
+    setUser({ id: null, isAdmin: null });
   };
+  // Shoes
 
   useEffect(() => {
-    console.log("State: ");
-    console.log(user); // checks the state
-    console.log("Local storage");
-    console.log(localStorage); // checks the localStorage
-  }, [user]);
-
-  useEffect(() => {
-    setShoes(shoesData.sneakers.map((shoe) => shoe));
+    setShoes(shoesData);
+    console.log("This is shoe data ", shoesData);
   }, []);
 
+  // Users
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,6 +60,13 @@ const App = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log("State: ");
+    console.log(user); // checks the state
+    console.log("Local storage");
+    console.log(localStorage); // checks the localStorage
+  }, [user]); // Log state changes
 
   return (
     <>
