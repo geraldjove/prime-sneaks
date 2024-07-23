@@ -5,7 +5,28 @@ import { FaShoppingCart } from "react-icons/fa";
 import UserContext from "../UserContext";
 
 const NavbarComponent = () => {
-  const { user, unsetUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const [firstName, setFirstName] = useState("");
+
+  useEffect(() => {
+    const apiUrl = "http://localhost:4000";
+    const fetchUserDetails = async () => {
+      const userDetails = await fetch(`${apiUrl}/users/details`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      });
+
+      const data = await userDetails.json();
+
+      if (data) {
+        setFirstName(data.result.firstName);
+      } else {
+        console.log("error");
+      }
+    };
+    fetchUserDetails();
+  });
 
   return (
     <nav className=" w-full h-[50px] bg-background">
@@ -41,7 +62,7 @@ const NavbarComponent = () => {
               )}
 
               <NavLink to="/profile">
-                <h1>Your Profile</h1>
+                <h1>{`Welcome, ${firstName}`}</h1>
               </NavLink>
               <span>|</span>
               <NavLink
