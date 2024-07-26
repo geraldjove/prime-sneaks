@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import SectionComponent from "../components/SectionComponent";
 import { FaStar } from "react-icons/fa";
 import UserContext from "../UserContext";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import StarRatingComponent from "../components/StarRatingComponent";
 
 const ProductPage = () => {
@@ -68,11 +68,11 @@ const ProductPage = () => {
               <div className="uppercase font-bold">color</div>
               <div>{color}</div>
             </div>
-            <a href={`/cart`}>
+            <Link to="/cart">
               <button className="bg-black text-white p-3 px-5">
                 Add to Cart
               </button>
-            </a>
+            </Link>
           </div>
         </div>
       </SectionComponent>

@@ -14,7 +14,9 @@ import AdminPage from "./pages/AdminPage";
 import AdminUpdatePage from "./pages/AdminUpdatePage";
 import CartPage from "./pages/CartPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import EditProductPage from "./pages/EditProductPage";
 import { UserProvider } from "./UserContext";
+import AddProductPage from "./pages/AddProductPage";
 
 const App = () => {
   const [shoes, setShoes] = useState([]);
@@ -25,11 +27,15 @@ const App = () => {
     localStorage.clear();
     setUser({ id: null, isAdmin: null });
   };
-  // Shoes
+  // Fetch Shoes
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchShoesData = await fetch("http://localhost:8000/sneakers");
+      const fetchShoesData = await fetch("http://localhost:4000/products/all", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      });
       const data = await fetchShoesData.json();
       if (data) {
         setShoes(data);
@@ -39,6 +45,80 @@ const App = () => {
     };
     fetchData();
   }, []);
+
+  // Add Product
+
+  const addProduct = async (product) => {
+    const formData = new FormData();
+
+    formData.append("image", product.image);
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("rating", product.rating);
+    formData.append("price", product.price);
+    formData.append("size", product.size);
+    formData.append("color", product.color);
+    formData.append("isActive", product.isActive);
+    formData.append("isSale", product.isSale);
+    formData.append("discountedPrice", product.discountedPrice);
+
+    try {
+      const addProductFetch = await fetch("http://localhost:4000/products", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+        body: formData, // Correct this line
+      });
+
+      const productParse = await addProductFetch.json();
+      if (productParse) {
+        console.log(productParse);
+        window.alert("Successfully added product!", productParse);
+      } else {
+        window.alert("Error adding product!");
+      }
+    } catch (error) {
+      window.alert("Error adding product!" + error);
+    }
+  };
+  // Update Product
+  const updateProduct = async (product) => {
+    const formData = new FormData();
+
+    formData.append("image", product.image);
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("rating", product.rating);
+    formData.append("price", product.price);
+    formData.append("discountedPrice", product.discountedPrice);
+    formData.append("size", product.size);
+    formData.append("color", product.color);
+    formData.append("isActive", product.isActive);
+    formData.append("isSale", product.isSale);
+
+    console.log(product.discountedPrice);
+
+    try {
+      const addProductFetch = await fetch("http://localhost:4000/products", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+        body: formData, // Correct this line
+      });
+
+      const productParse = await addProductFetch.json();
+      if (productParse) {
+        console.log(productParse);
+        window.alert("Successfully updated product!", productParse);
+      } else {
+        window.alert("Error updated product!");
+      }
+    } catch (error) {
+      window.alert("Error updated product!" + error);
+    }
+  };
 
   // Users
   useEffect(() => {
@@ -73,21 +153,26 @@ const App = () => {
   }, []);
 
   // Delete User
-  const deleteUser = async () => {
+  const deleteUser = async (userId) => {
+    console.log(userId);
     const userConfirmed = window.confirm(
       "Do you want to permanently delete this account?"
     );
 
     if (userConfirmed) {
-      const response = await fetch(`http://localhost:4000/users/${user.id}`, {
+      const response = await fetch(`http://localhost:4000/users/${userId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
         },
       });
       if (response) {
-        alert("Successfully Delete Account", navigate("/login"));
-        unsetUser();
+        if (user.isAdmin) {
+          alert("Successfully Delete Account", navigate("/admin-dashboard"));
+        } else {
+          alert("Successfully Delete Account", navigate("/login"));
+          unsetUser();
+        }
       } else {
         alert("Error Deleting Account");
       }
@@ -98,7 +183,17 @@ const App = () => {
 
   return (
     <>
-      <UserProvider value={{ user, setUser, unsetUser, shoes, deleteUser }}>
+      <UserProvider
+        value={{
+          user,
+          setUser,
+          unsetUser,
+          shoes,
+          deleteUser,
+          addProduct,
+          updateProduct,
+        }}
+      >
         <NavbarComponent />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -112,10 +207,19 @@ const App = () => {
             <>
               {user.isAdmin && (
                 <>
-                  <Route path="/admin-dashboard" element={<AdminPage />} />
+                  <Route
+                    path="/admin-dashboard"
+                    element={<AdminPage addProduct={addProduct} />}
+                  />
+
                   <Route
                     path="/profile/admin-update/:id"
                     element={<AdminUpdatePage />}
+                  />
+                  <Route path="/products/add" element={<AddProductPage />} />
+                  <Route
+                    path="/products/edit/:id"
+                    element={<EditProductPage />}
                   />
                 </>
               )}

@@ -6,9 +6,12 @@ import OrdersBarComponent from "../components/OrdersBarComponent";
 import ChatsBarComponent from "../components/ChatsBarComponent";
 import SettingsComponent from "../components/SettingsComponent";
 import LogOutComponent from "../components/LogOutComponent";
+import AddNewProductComponent from "../components/AddNewProductComponent";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import ReactModal from "react-modal";
 
-const AdminPage = ({ shoes, onLogin }) => {
+const AdminPage = ({ shoes, onLogin, addProduct }) => {
   const [active, setActive] = useState("UsersCard");
 
   return (
@@ -45,19 +48,26 @@ const AdminPage = ({ shoes, onLogin }) => {
           >
             Settings
           </button>
-
-          {/* <button className="w-full p-5 rounded-md font-medium text-gray-400 border-b-2">
-            Logout
-          </button> */}
           <LogOutComponent onLogin={onLogin} />
         </div>
-        {active === "UsersCard" ? <UsersBarComponent /> : null}
-        {active === "ProductsCard" ? (
-          <ProductsBarComponent shoes={shoes} />
-        ) : null}
-        {active === "OrdersCard" ? <OrdersBarComponent /> : null}
-        {active === "InboxCard" ? <ChatsBarComponent /> : null}
-        {active === "SettingsCard" ? <SettingsComponent /> : null}
+        <div>
+          {active === "UsersCard" && <UsersBarComponent />}
+          {active === "ProductsCard" && (
+            <>
+              <ProductsBarComponent shoes={shoes} />
+              <div className="flex justify-end">
+                <Link to={`/products/add`}>
+                  <button className="p-3 px-5 bg-blue-500 rounded-lg mt-5 text-white">
+                    Add Product
+                  </button>
+                </Link>
+              </div>
+            </>
+          )}
+          {active === "OrdersCard" && <OrdersBarComponent />}
+          {active === "InboxCard" && <ChatsBarComponent />}
+          {active === "SettingsCard" && <SettingsComponent />}
+        </div>
       </div>
     </SectionComponent>
   );

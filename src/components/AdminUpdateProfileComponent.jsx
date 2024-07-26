@@ -69,9 +69,9 @@ const AdminUpdatePasswordComponent = () => {
       const data = await response.json();
       console.log(data); // Handle the success response
       // Optionally, provide feedback to the user or redirect
-      window.location.reload();
       alert("Profile updated successfully!");
       navigate("/admin-dashboard");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating profile:", error);
       alert(`Error: ${error.message}`);
@@ -100,7 +100,7 @@ const AdminUpdatePasswordComponent = () => {
 
   return (
     <div className="max-w-[500px] mx-auto bg-white p-6 space-y-4 md:space-y-6 sm:p-8 rounded-md">
-      <h1 className="text-black font-black text-3xl">Update Profile</h1>
+      <h1 className="text-black font-black text-3xl">Admin - Update Profile</h1>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="sm:flex gap-4">
           <div className="w-full">
@@ -192,7 +192,7 @@ const AdminUpdatePasswordComponent = () => {
         </div>
       </form>
       <button
-        onClick={deleteUser}
+        onClick={() => deleteUser(id)}
         className="bg-red-500 p-2 w-full rounded-md font-bold text-white"
       >
         Delete Account
