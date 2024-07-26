@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
 import ProductCardComponent from "../components/ProductCardComponent";
 import LogOutComponent from "../components/LogOutComponent";
-import UserContext from "../UserContext";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const [firstName, setFirstName] = useState("");
@@ -10,6 +10,7 @@ const ProfilePage = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [id, setId] = useState("");
 
   useEffect(() => {
     const apiUrl = "http://localhost:4000";
@@ -23,6 +24,7 @@ const ProfilePage = () => {
       const data = await userDetails.json();
 
       if (data) {
+        setId(data.result.id);
         setFirstName(data.result.firstName);
         setLastName(data.result.lastName);
         setEmail(data.result.contactEmail);
@@ -53,14 +55,18 @@ const ProfilePage = () => {
             <h3>{phone}</h3>
             <h3>{address}</h3>
             <div className="w-full flex flex-col justify-center items-center space-y-3 ">
-              <button className="bg-blue-500 block w-full p-2 text-white">
-                Update Profile
-              </button>
-              <button className="bg-blue-500 block w-full p-2 text-white">
-                Change Password
-              </button>
+              <Link to={`/profile/update/${id}`} className="w-full">
+                <button className="bg-blue-500 block w-full p-2 text-white">
+                  Update Profile
+                </button>
+              </Link>
+              <Link to={`/profile/update/password/${id}`} className="w-full">
+                <button className="bg-blue-500 block w-full p-2 text-white">
+                  Change Password
+                </button>
+              </Link>
+
               <LogOutComponent />
-              <p className="text-red-500 text-sm">Delete account</p>
             </div>
           </div>
         </div>

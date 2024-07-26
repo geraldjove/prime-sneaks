@@ -8,17 +8,8 @@ const LoginPage = () => {
   const [contactEmail, setContactEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkboxTnC, setCheckboxTnC] = useState(false);
-  const [isActive, setIsActive] = useState(false); // Default to false
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (contactEmail !== "" && password !== "") {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [contactEmail, password]);
 
   const retrieveUserDetails = async (token) => {
     try {
@@ -67,7 +58,7 @@ const LoginPage = () => {
           title: "Success!",
           text: data.message,
         }).then(() => {
-          navigate("/shop");
+          navigate("/");
         });
       } else {
         Swal.fire("Error", data.message || "Login failed", "error");
@@ -95,6 +86,7 @@ const LoginPage = () => {
                 placeholder="name@company.com"
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
+                required
                 className="block rounded-md py-1 px-2 bg-gray-200"
               />
             </div>
@@ -106,6 +98,7 @@ const LoginPage = () => {
                 id="password"
                 placeholder="********"
                 value={password}
+                required
                 onChange={(e) => setPassword(e.target.value)}
                 className="block rounded-md py-1 px-2 bg-gray-200"
               />
@@ -126,7 +119,7 @@ const LoginPage = () => {
             <div>
               <button
                 className="bg-blue-500 p-2 w-full rounded-md font-bold text-white"
-                disabled={!isActive}
+                // disabled={!isActive}
               >
                 Sign in
               </button>

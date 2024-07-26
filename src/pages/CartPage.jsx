@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import SectionComponent from "../components/SectionComponent";
 import CartCard from "../components/CartCard";
 import ProductCardSmallComponent from "../components/ProductCardSmallComponent";
+import UserContext from "../UserContext";
 
-const CartPage = ({ shoes }) => {
+const CartPage = () => {
+  const { shoes } = useContext(UserContext);
   return (
     <SectionComponent>
       <div className="space-y-3">
@@ -53,7 +55,7 @@ const CartPage = ({ shoes }) => {
         <div className="flex flex-col">
           <h1 className="font-bold text-2xl">Recently Viewed</h1>
           <div className="bg-white min-h-[100px] w-full rounded-md flex gap-2 overflow-auto">
-            <ProductCardSmallComponent limit={5} />
+            {/* <ProductCardSmallComponent /> */}
           </div>
         </div>
       </div>

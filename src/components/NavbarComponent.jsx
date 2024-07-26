@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { FaCartShopping } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import UserContext from "../UserContext";
 
@@ -11,18 +10,22 @@ const NavbarComponent = () => {
   useEffect(() => {
     const apiUrl = "http://localhost:4000";
     const fetchUserDetails = async () => {
-      const userDetails = await fetch(`${apiUrl}/users/details`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      });
+      try {
+        const userDetails = await fetch(`${apiUrl}/users/details`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        });
 
-      const data = await userDetails.json();
+        const data = await userDetails.json();
 
-      if (data) {
-        setFirstName(data.result.firstName);
-      } else {
-        console.log("error");
+        if (data) {
+          setFirstName(data.result.firstName);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.error("Error ", error);
       }
     };
     fetchUserDetails();
