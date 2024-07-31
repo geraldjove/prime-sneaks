@@ -53,8 +53,6 @@ const ProductPage = () => {
     }
   };
 
-  console.log(shoe.image);
-
   return (
     <>
       <SectionComponent>
@@ -81,9 +79,13 @@ const ProductPage = () => {
               <div className="uppercase font-bold">size</div>
               <div className="uppercase font-bold">
                 <select>
-                  {shoe.size.map((range, index) => (
-                    <option key={index}>{range}</option>
-                  ))}
+                  {shoe.size
+                    .sort((a, b) => a - b) // Assuming sizes are numbers. For strings, use localeCompare.
+                    .map((size, index) => (
+                      <option key={index} value={size}>
+                        {size}
+                      </option>
+                    ))}
                 </select>
               </div>
 
@@ -97,11 +99,13 @@ const ProductPage = () => {
               <div>
                 <select>
                   Color
-                  {shoe.color.map((color, index) => (
-                    <option value={color} key={index}>
-                      {color}
-                    </option>
-                  ))}
+                  {shoe.color
+                    .sort((a, b) => a - b)
+                    .map((color, index) => (
+                      <option value={color} key={index}>
+                        {color}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>

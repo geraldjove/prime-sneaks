@@ -13,7 +13,7 @@ const UpdateProductComponent = () => {
   const [rating, setRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const [price, setPrice] = useState(0);
-  const [discountedPrice, setDiscountedPrice] = useState("");
+  const [discountedPrice, setDiscountedPrice] = useState(0);
   const [size, setSize] = useState([]);
   const [addSize, setAddSize] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -51,11 +51,12 @@ const UpdateProductComponent = () => {
           setName(product.name);
           setDescription(product.description);
           setSelectedRating(product.rating);
+          setRating(product.rating);
           setPrice(product.price);
-          setDiscountedPrice(product.discountedPrice);
+          setDiscountedPrice(discountedPrice);
           setSize(product.size);
           setColor(product.color);
-          setIsActive(product.isActive);
+          setSelectStatus(product.isActive);
         } else {
           console.log("Error parsing data");
         }
@@ -119,12 +120,12 @@ const UpdateProductComponent = () => {
       image,
       name,
       description,
-      rating,
+      rating: selectedRating,
       price,
       discountedPrice,
       size,
       color,
-      isActive,
+      isActive: selectStatus,
       isSale,
     };
 

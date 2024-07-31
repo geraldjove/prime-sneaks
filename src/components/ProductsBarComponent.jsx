@@ -1,11 +1,37 @@
-import React, { useContext } from "react";
-import UserContext from "../UserContext";
+import React, { useState, useEffect } from "react";
+
 import ProductBarComponent from "../components/ProductBarComponent";
-import Modal from "react-modal";
 
 const ProductsBarComponent = () => {
-  const { shoes } = useContext(UserContext);
+  const [shoes, setShoes] = useState([]);
+
+  useEffect(() => {
+    const fetchAllShoes = async () => {
+      const fetchShoes = await fetch(
+        `${import.meta.env.VITE_API_URL}/products/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
+      const data = await fetchShoes.json();
+
+      if (data) {
+        setShoes(data);
+      } else {
+        console.log(data);
+      }
+    };
+    fetchAllShoes();
+  }, []);
+
+  if (!shoes.ok) {
+    return <p>Loading</p>;
+  }
+
   console.log(shoes);
+
   return (
     <>
       <div className="border-2 rounded-lg overflow-auto min-h-[100vh] max-h-[100vh]">
