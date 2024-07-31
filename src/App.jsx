@@ -24,6 +24,9 @@ const App = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const token = localStorage.getItem("access");
+  console.log(token);
+
   const unsetUser = () => {
     localStorage.clear();
     setUser({ id: null, isAdmin: null });
@@ -33,10 +36,10 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       const fetchShoesData = await fetch(
-        `${import.meta.env.VITE_API_URL}/products/all`,
+        `${import.meta.env.VITE_API_URL}/products`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -73,7 +76,7 @@ const App = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData, // Correct this line
         }
@@ -114,7 +117,7 @@ const App = () => {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData, // Correct this line
         }
@@ -140,7 +143,7 @@ const App = () => {
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -164,7 +167,7 @@ const App = () => {
           `${import.meta.env.VITE_API_URL}/users/details`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("access")}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -203,7 +206,7 @@ const App = () => {
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
