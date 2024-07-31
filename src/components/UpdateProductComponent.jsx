@@ -29,7 +29,7 @@ const UpdateProductComponent = () => {
     const getProductDetail = async () => {
       try {
         const fetchProduct = await fetch(
-          `http://localhost:4000/products/${id}`,
+          `${import.meta.env.VITE_API_URL}/products/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access")}`,
@@ -43,7 +43,10 @@ const UpdateProductComponent = () => {
           const product = dataParse.ok;
           setShoe(product);
           setImage(
-            `http://localhost:4000/${product.image.replace(/\\/g, "/")}`
+            `${import.meta.env.VITE_API_URL}/${product.image.replace(
+              /\\/g,
+              "/"
+            )}`
           );
           setName(product.name);
           setDescription(product.description);

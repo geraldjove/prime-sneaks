@@ -15,7 +15,7 @@ const CartCard = ({
 
   const handleQuantityChange = async (val) => {
     const fetchUpdateCart = await fetch(
-      "http://localhost:4000/cart/add-to-cart",
+      `${import.meta.env.VITE_API_URL}/cart/add-to-cart`,
       {
         method: "PATCH",
         headers: {
@@ -51,7 +51,7 @@ const CartCard = ({
     const userConfirm = window.confirm("Do you want to remove this product?");
     if (userConfirm) {
       const response = await fetch(
-        `http://localhost:4000/cart/delete/${productId}`,
+        `${import.meta.env.VITE_API_URL}/cart/delete/${productId}`,
         {
           method: "Delete",
           headers: {
@@ -70,7 +70,7 @@ const CartCard = ({
       <div className="grid sm:grid-cols-3">
         <div className="min-h-[100px] flex items-center gap-4">
           <img
-            src={`http://localhost:4000/${image.replace(/\\/g, "/")}`}
+            src={`${import.meta.env.VITE_API_URL}/${image.replace(/\\/g, "/")}`}
             className="max-w-[50px]"
           />
           <h1 className="font-bold">{name}</h1>

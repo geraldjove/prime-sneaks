@@ -20,11 +20,14 @@ const AdminUpdatePasswordComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
         const data = await response.json();
         if (data) {
           setFirstName(data.firstName);
@@ -49,22 +52,25 @@ const AdminUpdatePasswordComponent = () => {
     e.preventDefault();
     console.log(id);
     try {
-      const response = await fetch(`http://localhost:4000/users/update/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          contactEmail,
-          contactPhone,
-          contactAddress,
-          birthDate,
-          isAdmin: role,
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            contactEmail,
+            contactPhone,
+            contactAddress,
+            birthDate,
+            isAdmin: role,
+          }),
+        }
+      );
 
       const data = await response.json();
       console.log(data); // Handle the success response

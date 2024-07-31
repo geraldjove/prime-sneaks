@@ -6,11 +6,14 @@ const UsersBarComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersData = await fetch("http://localhost:4000/users/all", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        });
+        const usersData = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/all`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
         const data = await usersData.json();
         if (data) {
           setUsers(data.users);

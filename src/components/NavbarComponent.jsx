@@ -8,14 +8,16 @@ const NavbarComponent = () => {
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    const apiUrl = "http://localhost:4000";
     const fetchUserDetails = async () => {
       try {
-        const userDetails = await fetch(`${apiUrl}/users/details`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        });
+        const userDetails = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/details`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
 
         const data = await userDetails.json();
 

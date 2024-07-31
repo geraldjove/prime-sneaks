@@ -18,7 +18,10 @@ const ProductCardComponent = ({ limit }) => {
           >
             <div className="max-h-[200px] min-h-[200px] flex justify-center">
               <img
-                src={`http://localhost:4000/${shoe.image.replace(/\\/g, "/")}`} // Adjust the path
+                src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                  /\\/g,
+                  "/"
+                )}`} // Adjust the path
                 alt={shoe.index}
                 className="w-full object-cover"
               />
