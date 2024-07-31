@@ -14,7 +14,7 @@ const LoginPage = () => {
   const retrieveUserDetails = async (token) => {
     try {
       const response = await fetch(
-        `${import.meta.env.REACT_APP_API_URL}/users/details`,
+        `${import.meta.env.VITE_API_URL}/users/details`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -23,11 +23,13 @@ const LoginPage = () => {
       );
       const data = await response.json();
 
-      if (data) {
+      if (data && data.result) {
         setUser({
           id: data.result.id,
           isAdmin: data.result.isAdmin,
         });
+      } else {
+        console.error("Error: No result in data", data);
       }
     } catch (error) {
       console.error("Error retrieving user details:", error);
@@ -52,6 +54,7 @@ const LoginPage = () => {
       );
 
       const data = await response.json();
+      console.log("Login response data:", data);
 
       if (data.auth) {
         localStorage.setItem("access", data.auth);
@@ -120,10 +123,7 @@ const LoginPage = () => {
               </p>
             </div>
             <div>
-              <button
-                className="bg-blue-500 p-2 w-full rounded-md font-bold text-white"
-                // disabled={!isActive}
-              >
+              <button className="bg-blue-500 p-2 w-full rounded-md font-bold text-white">
                 Sign in
               </button>
             </div>
