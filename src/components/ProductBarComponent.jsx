@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
+import UserContext from "../UserContext";
 
 const ProductBarComponent = ({ shoe, index }) => {
-  console.log(shoe.image);
+  const { deleteProduct } = useContext(UserContext);
+
+  const handleDelete = async (productId) => {
+    deleteProduct(productId);
+  };
+
   return (
     <>
       <div
@@ -48,10 +54,17 @@ const ProductBarComponent = ({ shoe, index }) => {
           </div>
           <div className=" min-h-[50px] flex justify-center items-center gap-2">
             <Link to={`/products/edit/${shoe._id}`}>
-              <button className="bg-blue-500 p-2">Update</button>
+              <button className="bg-blue-500 p-2 rounded-md text-white">
+                Update
+              </button>
             </Link>
 
-            <button className="bg-red-500 p-2">Delete</button>
+            <button
+              onClick={() => handleDelete(shoe._id)}
+              className="bg-red-500 p-2 rounded-md text-white"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>

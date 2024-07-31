@@ -1,19 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import UserContext from "../UserContext";
 
 const UpdateProductComponent = () => {
-  const { addProduct, shoes } = useContext(UserContext);
+  const { updateProduct } = useContext(UserContext);
   const { id } = useParams();
-
-  console.log(shoes);
 
   const [shoe, setShoe] = useState({});
   const [image, setImage] = useState(null);
-  const [name, setName] = useState(shoe.name);
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [rating, setRating] = useState([]);
-  const [selectedRating, setSelectedRating] = useState("");
+  const [rating, setRating] = useState(0);
+  const [selectedRating, setSelectedRating] = useState(0);
   const [price, setPrice] = useState(0);
   const [discountedPrice, setDiscountedPrice] = useState("");
   const [size, setSize] = useState([]);
@@ -22,53 +20,57 @@ const UpdateProductComponent = () => {
   const [color, setColor] = useState([]);
   const [addColor, setAddColor] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const [selectStatus, setSelectStatus] = useState("");
+  const [selectStatus, setSelectStatus] = useState("true");
   const [isActive, setIsActive] = useState(true);
   const [isSale, setIsSale] = useState(false);
   const [saleDiscount, setSaleDiscount] = useState(0);
 
-  // Get Shoe Data
-
   useEffect(() => {
-    const fetchShoeData = async () => {
-      console.log(id);
-      const shoeResponse = await fetch(
-        `http://localhost:4000/products/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        }
-      );
-      const shoeData = await shoeResponse.json();
-      console.log(shoeData);
+    const getProductDetail = async () => {
+      try {
+        const fetchProduct = await fetch(
+          `http://localhost:4000/products/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
 
-      setShoe(shoeData);
+        const dataParse = await fetchProduct.json();
+
+        if (dataParse.ok) {
+          const product = dataParse.ok;
+          setShoe(product);
+          setImage(
+            `http://localhost:4000/${product.image.replace(/\\/g, "/")}`
+          );
+          setName(product.name);
+          setDescription(product.description);
+          setSelectedRating(product.rating);
+          setPrice(product.price);
+          setDiscountedPrice(product.discountedPrice);
+          setSize(product.size);
+          setColor(product.color);
+          setIsActive(product.isActive);
+        } else {
+          console.log("Error parsing data");
+        }
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
     };
 
-    fetchShoeData();
-  }, []);
-
-  useEffect(() => {
-    console.log(selectedRating);
-    setRating(selectedRating);
-
-    if (selectStatus === "true") {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }, [selectedRating]);
+    getProductDetail();
+  }, [id]);
 
   const applyDiscountPrice = (e) => {
     e.preventDefault();
     if (saleDiscount > 0) {
       setDiscountedPrice(price - price * (saleDiscount / 100));
       setIsSale(true);
-    } else if (saleDiscount == 0) {
-      setDiscountedPrice(price);
     } else {
+      setDiscountedPrice(price);
       setIsSale(false);
     }
   };
@@ -76,7 +78,6 @@ const UpdateProductComponent = () => {
   const removeSize = (e) => {
     e.preventDefault();
     const updatedSizeList = size.filter((s) => s !== Number(selectedSize));
-
     setSize(updatedSizeList);
   };
 
@@ -87,11 +88,8 @@ const UpdateProductComponent = () => {
   };
 
   const onChangePicture = (e) => {
-    e.preventDefault();
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
-    } else {
-      console.log("Error");
     }
   };
 
@@ -99,7 +97,6 @@ const UpdateProductComponent = () => {
     e.preventDefault();
     if (addSize) {
       setSize([...size, Number(addSize)]);
-      console.log(size);
       setAddSize("");
     }
   };
@@ -112,10 +109,10 @@ const UpdateProductComponent = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(discountedPrice);
     const product = {
+      id,
       image,
       name,
       description,
@@ -127,8 +124,10 @@ const UpdateProductComponent = () => {
       isActive,
       isSale,
     };
+
     console.log(product);
-    addProduct(product);
+
+    updateProduct(product);
   };
 
   return (
@@ -137,7 +136,6 @@ const UpdateProductComponent = () => {
         <h1 className="text-black font-black text-3xl">Update Product</h1>
         <form
           onSubmit={handleSubmit}
-          method="POST"
           className="grid sm:grid-cols-[50%_50%] gap-3"
         >
           <div className="border p-5 rounded-md">
@@ -145,16 +143,25 @@ const UpdateProductComponent = () => {
               <label className="block">Upload Image</label>
               <input
                 type="file"
-                required
                 className="bg-gray-200 rounded-md w-full"
                 onChange={onChangePicture}
               />
             </div>
-            {image && (
-              <div>
-                <img src={URL.createObjectURL(image)} className="max-w-full" />
-              </div>
-            )}
+            <div>
+              {image ? (
+                <img
+                  src={
+                    typeof image === "string"
+                      ? image
+                      : URL.createObjectURL(image)
+                  }
+                  alt="Product"
+                  className="max-w-full"
+                />
+              ) : (
+                <p>No image available</p>
+              )}
+            </div>
           </div>
           <div className="space-y-5 flex flex-col justify-center bg-gray-200 p-5 rounded-lg">
             <div>
@@ -196,20 +203,20 @@ const UpdateProductComponent = () => {
                 <div>
                   <label className="block">Price</label>
                   <input
-                    type="text"
+                    type="number"
                     className="bg-white rounded-md w-full p-2"
                     value={price}
                     required
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => setPrice(Number(e.target.value))}
                   />
                 </div>
                 <div>
                   <label className="block">Discounted Price</label>
                   <input
-                    type="text"
+                    type="number"
                     className="bg-white rounded-md w-full p-2"
                     value={discountedPrice}
-                    onChange={(e) => setDiscountedPrice(e.target.event)}
+                    onChange={(e) => setDiscountedPrice(Number(e.target.value))}
                   />
                 </div>
               </div>
@@ -220,7 +227,7 @@ const UpdateProductComponent = () => {
                 <input
                   value={addSize}
                   onChange={(e) => setAddSize(e.target.value)}
-                  type="text"
+                  type="number"
                   className="bg-white rounded-md w-full p-2"
                   placeholder="0"
                 />
@@ -303,7 +310,7 @@ const UpdateProductComponent = () => {
               <div className="flex flex-col">
                 <label>Discount %</label>
                 <input
-                  type="text"
+                  type="number"
                   className="bg-white rounded-md w-full p-2"
                   value={saleDiscount}
                   placeholder="%"
@@ -317,15 +324,19 @@ const UpdateProductComponent = () => {
                 </button>
               </div>
             </div>
-
             <div className="flex justify-around">
               <div className="flex justify-center gap-4">
-                <button className="bg-blue-500 p-2 rounded-md text-white">
-                  Add Product
+                <button
+                  type="submit"
+                  className="bg-blue-500 p-2 rounded-md text-white"
+                >
+                  Update Product
                 </button>
-                <button className="bg-red-500 p-2 rounded-md text-white">
-                  Cancel
-                </button>
+                <Link to="/admin-dashboard">
+                  <button className="bg-red-500 p-2 rounded-md text-white">
+                    Cancel
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

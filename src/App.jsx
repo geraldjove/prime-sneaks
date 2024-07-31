@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 import NavbarComponent from "./components/NavbarComponent";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
@@ -22,6 +22,7 @@ const App = () => {
   const [shoes, setShoes] = useState([]);
   const [user, setUser] = useState({ id: null, isAdmin: null });
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const unsetUser = () => {
     localStorage.clear();
@@ -46,8 +47,9 @@ const App = () => {
     fetchData();
   }, []);
 
-  // Add Product
+  console.log(shoes);
 
+  // Add Product
   const addProduct = async (product) => {
     const formData = new FormData();
 
@@ -82,6 +84,7 @@ const App = () => {
       window.alert("Error adding product!" + error);
     }
   };
+
   // Update Product
   const updateProduct = async (product) => {
     const formData = new FormData();
@@ -97,18 +100,21 @@ const App = () => {
     formData.append("isActive", product.isActive);
     formData.append("isSale", product.isSale);
 
-    console.log(product.discountedPrice);
+    console.log(formData);
 
     try {
-      const addProductFetch = await fetch("http://localhost:4000/products", {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-        body: formData, // Correct this line
-      });
-
-      const productParse = await addProductFetch.json();
+      const updateProductFetch = await fetch(
+        `http://localhost:4000/products/update/${product.id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+          body: formData, // Correct this line
+        }
+      );
+      console.log(updateProductFetch);
+      const productParse = await updateProductFetch.json();
       if (productParse) {
         console.log(productParse);
         window.alert("Successfully updated product!", productParse);
@@ -117,6 +123,30 @@ const App = () => {
       }
     } catch (error) {
       window.alert("Error updated product!" + error);
+    }
+  };
+
+  // Delete Product
+
+  const deleteProduct = async (id) => {
+    const response = await fetch(
+      `http://localhost:4000/products/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      }
+    );
+
+    const confirm = window.confirm(`Do you wish to delete ${id}?`);
+    if (confirm) {
+      const data = response.json();
+      if (data) {
+        window.alert("Successfully delete product", window.location.reload());
+      } else {
+        window.alert("Failed to delete product");
+      }
     }
   };
 
@@ -192,6 +222,7 @@ const App = () => {
           deleteUser,
           addProduct,
           updateProduct,
+          deleteProduct,
         }}
       >
         <NavbarComponent />
