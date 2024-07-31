@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import UserContext from "../UserContext";
 import StarRatingComponent from "./StarRatingComponent";
 
-const ProductCardComponent = ({ limit }) => {
+const TopProductCardComponent = ({ limit }) => {
   const { id } = useParams();
   const { shoes } = useContext(UserContext);
 
@@ -13,9 +13,9 @@ const ProductCardComponent = ({ limit }) => {
         shoes.ok.slice(0, limit || shoes.ok.length).map((shoe, index) => (
           <div
             key={index}
-            className="border-2 max-w-full bg-white min-h-full rounded-lg p-5 flex flex-col justify-center items-center"
+            className="border-2 max-w-full bg-white min-h-full rounded-lg p-2 flex flex-col justify-center items-center"
           >
-            <div className="max-h-[200px] min-h-[200px] flex justify-center">
+            <div className="w-full flex justify-center">
               <img
                 src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
                   /\\/g,
@@ -45,4 +45,4 @@ const ProductCardComponent = ({ limit }) => {
   );
 };
 
-export default ProductCardComponent;
+export default TopProductCardComponent;

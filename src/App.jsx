@@ -23,9 +23,7 @@ const App = () => {
   const [user, setUser] = useState({ id: null, isAdmin: null });
   const navigate = useNavigate();
   const { id } = useParams();
-
   const token = localStorage.getItem("access");
-  console.log(token);
 
   const unsetUser = () => {
     localStorage.clear();
@@ -52,8 +50,6 @@ const App = () => {
     };
     fetchData();
   }, []);
-
-  console.log(shoes);
 
   // Add Product
   const addProduct = async (product) => {

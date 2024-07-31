@@ -19,19 +19,23 @@ const NavbarComponent = () => {
           }
         );
 
-        const data = await userDetails.json();
+        if (userDetails) {
+          const data = await userDetails.json();
 
-        if (data) {
-          setFirstName(data.result.firstName);
+          if (data) {
+            setFirstName(data.result.firstName);
+          } else {
+            console.log("error");
+          }
         } else {
-          console.log("error");
+          setFirstName("");
         }
       } catch (error) {
         console.error("Error ", error);
       }
     };
     fetchUserDetails();
-  });
+  }, [firstName]);
 
   return (
     <nav className=" w-full h-[50px] bg-background">

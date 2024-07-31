@@ -1,22 +1,32 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Swal from "sweetalert2";
 import UserContext from "../UserContext";
 import { useNavigate } from "react-router-dom";
-import { SiUndertale } from "react-icons/si";
 
 const LogoutComponent = () => {
-  const { unsetUser, setUser } = useContext(UserContext);
+  const { unsetUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const logOutClick = () => {
-    const userConfirmed = window.confirm("Do you want to logout?");
-    if (userConfirmed) {
-      unsetUser();
-      setUser({ id: null, isAdmin: null });
+  const logOutClick = async () => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, logout!",
+      });
 
-      navigate("/login");
-    } else {
-      console.log("cancelled");
+      if (result.isConfirmed) {
+        unsetUser();
+        navigate("/login");
+      } else {
+        console.log("Logout cancelled");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
   };
 
