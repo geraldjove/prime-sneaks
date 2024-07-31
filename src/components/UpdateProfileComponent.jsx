@@ -17,11 +17,14 @@ const UpdateProfileComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/users/details`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/details`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
         const data = await response.json();
         console.log(data); // Check what data is received
         if (data && data.result) {
@@ -48,21 +51,24 @@ const UpdateProfileComponent = () => {
     console.log("Clicked");
 
     try {
-      const response = await fetch(`http://localhost:4000/users/update`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          contactEmail,
-          contactPhone,
-          contactAddress,
-          birthDate,
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/update`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            contactEmail,
+            contactPhone,
+            contactAddress,
+            birthDate,
+          }),
+        }
+      );
       if (response) {
         alert("Successfully updated profile", navigate("/profile"));
       }

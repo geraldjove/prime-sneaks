@@ -19,7 +19,10 @@ const ProductBarComponent = ({ shoe, index }) => {
         <div className="grid sm:grid-cols-8">
           <div className=" min-h-[50px] mx-auto flex justify-center items-center">
             <img
-              src={`http://localhost:4000/${shoe.image.replace(/\\/g, "/")}`}
+              src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                /\\/g,
+                "/"
+              )}`}
               className="h-[50px]"
             />
           </div>

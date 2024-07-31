@@ -8,7 +8,7 @@ const CartPage = () => {
 
   useEffect(() => {
     const fetchCartData = async () => {
-      const fetchCart = await fetch("http://localhost:4000/cart", {
+      const fetchCart = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
         },

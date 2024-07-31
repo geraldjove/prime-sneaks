@@ -29,17 +29,20 @@ const ProductPage = () => {
   }
 
   const addToCart = async () => {
-    const response = await fetch("http://localhost:4000/cart/add-to-cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("access")}`,
-      },
-      body: JSON.stringify({
-        productId: id,
-        quantity: 1,
-      }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/cart/add-to-cart`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+        body: JSON.stringify({
+          productId: id,
+          quantity: 1,
+        }),
+      }
+    );
 
     const data = await response.json();
 
@@ -65,7 +68,10 @@ const ProductPage = () => {
           <div className="min-h-50px p-5 col-span-3 flex flex-col justify-center items-center">
             <div>
               <img
-                src={`http://localhost:4000/${shoe.image.replace(/\\/g, "/")}`}
+                src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                  /\\/g,
+                  "/"
+                )}`}
                 alt="product-image"
               />
             </div>

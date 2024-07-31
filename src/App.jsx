@@ -32,11 +32,14 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchShoesData = await fetch("http://localhost:4000/products/all", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      });
+      const fetchShoesData = await fetch(
+        `${import.meta.env.VITE_API_URL}/products/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
       const data = await fetchShoesData.json();
       if (data) {
         setShoes(data);
@@ -65,13 +68,16 @@ const App = () => {
     formData.append("discountedPrice", product.discountedPrice);
 
     try {
-      const addProductFetch = await fetch("http://localhost:4000/products", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-        body: formData, // Correct this line
-      });
+      const addProductFetch = await fetch(
+        `${import.meta.env.VITE_API_URL}/products`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+          body: formData, // Correct this line
+        }
+      );
 
       const productParse = await addProductFetch.json();
       if (productParse) {
@@ -104,7 +110,7 @@ const App = () => {
 
     try {
       const updateProductFetch = await fetch(
-        `http://localhost:4000/products/update/${product.id}`,
+        `${import.meta.env.VITE_API_URL}/products/update/${product.id}`,
         {
           method: "PUT",
           headers: {
@@ -130,7 +136,7 @@ const App = () => {
 
   const deleteProduct = async (id) => {
     const response = await fetch(
-      `http://localhost:4000/products/delete/${id}`,
+      `${import.meta.env.VITE_API_URL}/products/delete/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -154,12 +160,14 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = "http://localhost:4000";
-        const response = await fetch(`${apiUrl}/users/details`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access")}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/details`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access")}`,
+            },
+          }
+        );
         const data = await response.json();
         if (data) {
           setUser({
@@ -190,12 +198,15 @@ const App = () => {
     );
 
     if (userConfirmed) {
-      const response = await fetch(`http://localhost:4000/users/${userId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
       if (response) {
         if (user.isAdmin) {
           alert("Successfully Delete Account", navigate("/admin-dashboard"));

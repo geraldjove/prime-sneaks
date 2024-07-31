@@ -9,12 +9,15 @@ const UserBarComponent = ({ user }) => {
     );
 
     if (userConfirmed) {
-      const response = await fetch(`http://localhost:4000/users/${userId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+          },
+        }
+      );
       if (response) {
         alert("Successfully Delete Account", window.location.reload());
       } else {
