@@ -1,11 +1,44 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
 import CartCard from "../components/CartCard";
-import ProductCardSmallComponent from "../components/ProductCardSmallComponent";
-import UserContext from "../UserContext";
 
 const CartPage = () => {
-  const { shoes } = useContext(UserContext);
+  const [cart, setCart] = useState(null); // Initialize as null for loading state
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      const fetchCart = await fetch("http://localhost:4000/cart", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+      });
+      const dataCart = await fetchCart.json();
+      setCart(dataCart.ok ? dataCart.ok.cartItems : []); // Assuming dataCart.ok.cartItems is an array
+      calculateTotalPrice(dataCart.ok ? dataCart.ok.cartItems : []);
+    };
+    fetchCartData();
+  }, []);
+
+  const calculateTotalPrice = (cartItems) => {
+    const total = cartItems.reduce((sum, item) => sum + item.subTotal, 0);
+    setTotalPrice(total);
+  };
+
+  const handleQuantityChange = (productId, newQuantity, newSubTotal) => {
+    const updatedCart = cart.map((item) =>
+      item.productId === productId
+        ? { ...item, quantity: newQuantity, subTotal: newSubTotal }
+        : item
+    );
+    setCart(updatedCart);
+    calculateTotalPrice(updatedCart);
+  };
+
+  if (cart === null) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <SectionComponent>
       <div className="space-y-3">
@@ -25,7 +58,17 @@ const CartPage = () => {
                 </div>
               </div>
               <div>
-                <CartCard shoes={shoes} limit={1} />
+                {cart.map((cart, index) => (
+                  <CartCard
+                    key={index}
+                    productId={cart.productId}
+                    image={cart.productImage}
+                    name={cart.name}
+                    initialQuantity={cart.quantity}
+                    initialSubTotal={cart.subTotal}
+                    onQuantityChange={handleQuantityChange}
+                  />
+                ))}
               </div>
             </div>
             <div className="bg-white rounded-md min-h-[400px] p-5 space-y-10 flex flex-col justify-center ">
@@ -34,12 +77,12 @@ const CartPage = () => {
                   Total
                 </div>
                 <div className="flex justify-end font-bold text-blue-800">
-                  P 1,500
+                  P {totalPrice}
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <h3 className="font-bold text-red-500">You saved P 3000.00!</h3>
-              </div>
+              </div> */}
               <div>
                 <h3>Taxes and shipping calculated at checkout.</h3>
               </div>
@@ -49,13 +92,6 @@ const CartPage = () => {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col">
-          <h1 className="font-bold text-2xl">Recently Viewed</h1>
-          <div className="bg-white min-h-[100px] w-full rounded-md flex gap-2 overflow-auto">
-            {/* <ProductCardSmallComponent /> */}
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ const UpdatePasswordComponent = () => {
         const data = await response.json();
         console.log(data); // Check what data is received
         if (data && data.result) {
-          setPassword(data.result.password.slice(0, 10));
+          // setPassword(data.result.password.slice(0, 10));
         } else {
           console.log("Error fetching data");
         }

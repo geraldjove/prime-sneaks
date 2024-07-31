@@ -1,39 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const QuantityComponent = () => {
-  const [val, setVal] = useState(1);
+const QuantityComponent = ({ quantity, OnQuantityChange }) => {
+  const [val, setVal] = useState(quantity);
 
-  const handleIncrement = () => {
-    setVal(val + 1);
-  };
-  const handleDecrement = () => {
-    if (val <= 0) {
-      setVal(0);
-    } else {
-      setVal(val - 1);
-    }
-  };
+  useEffect(() => {
+    setVal(quantity);
+  }, [quantity]);
+
+  const handleIncrement = () => OnQuantityChange(val + 1);
+  const handleDecrement = () => OnQuantityChange(val > 0 ? val - 1 : 0);
+
   return (
     <div>
       <button
-        className="border min-w-[30px] rounded-sm"
-        onClick={handleIncrement}
+        className="border min-w-[30px] rounded-sm bg-white"
+        onClick={handleDecrement}
       >
-        +
+        -
       </button>
       <input
         type="text"
         className="max-w-[30px] text-center border"
-        placeholder="1"
         value={val}
         id="val"
-        onChange={(e) => setVal(e.target.value)}
+        onChange={(e) => {
+          const value = parseInt(e.target.value, 10);
+          if (!isNaN(value)) {
+            setVal(value);
+          }
+        }}
       />
       <button
-        className="border min-w-[30px] rounded-sm"
-        onClick={handleDecrement}
+        className="border min-w-[30px] rounded-sm bg-white"
+        onClick={handleIncrement}
       >
-        -
+        +
       </button>
     </div>
   );

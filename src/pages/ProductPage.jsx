@@ -4,56 +4,78 @@ import { FaStar } from "react-icons/fa";
 import UserContext from "../UserContext";
 import { useParams, Link } from "react-router-dom";
 import StarRatingComponent from "../components/StarRatingComponent";
+import QuantityComponent from "../components/QuantityComponent";
 
 const ProductPage = () => {
   const { id } = useParams();
   const { shoes } = useContext(UserContext);
-  const [shoeName, setShoeName] = useState("");
-  const [shoeBrandName, setShoeBrandName] = useState("");
-  const [designer, setDesigner] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [size, setSize] = useState([]);
-  const [price, setPrice] = useState("");
-  const [color, setColor] = useState("");
-  const [rating, setRating] = useState(0);
+
+  const [shoe, setShoe] = useState({});
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
-    if (shoes && shoes.length > 0) {
-      const shoe = shoes.find((shoe) => shoe.id === id);
-      if (shoe) {
-        setShoeName(shoe.name);
-        setShoeBrandName(shoe.brand_name);
-        setDesigner(shoe.designer);
-        setDescription(shoe.story_html || " ");
-        setImage(shoe.main_picture_url);
-        setSize(shoe.size_range);
-        setPrice(shoe.retail_price_cents / 100);
-        setColor(shoe.color);
-        setRating(Math.floor(shoe.retail_price_cents / 5000));
-      }
+    if (shoes && shoes.ok) {
+      const foundShoe = shoes.ok.find((shoe) => shoe._id === id);
+      setShoe(foundShoe || null); // Set state with the found shoe or null if not found
     }
-  }, [shoes, id, designer, description, image, size, price, color]);
+  }, [shoes, id]);
+
+  if (!shoe) {
+    return <p>Loading...</p>; // Show loading state or a message while the shoe is being fetched
+  }
+
+  if (!shoe.size || !shoe.color) {
+    return <p>Data is not available.</p>; // Handle cases where size or color might be missing
+  }
+
+  const addToCart = async () => {
+    const response = await fetch("http://localhost:4000/cart/add-to-cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+      body: JSON.stringify({
+        productId: id,
+        quantity: 1,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data) {
+      window.alert("Successfully added to cart!");
+    } else {
+      console.log("Error adding to cart");
+    }
+  };
+
+  console.log(shoe.image);
 
   return (
     <>
       <SectionComponent>
         <div className="grid sm:grid-cols-5 items-center">
           <div className=" min-h-50px space-y-2 p-5">
-            <h3 className="text-lg font-bold">{shoeBrandName}</h3>
-            <h1 className="text-3xl font-black">{shoeName}</h1>
-            <h3 className="text-sm">Designer: {designer}</h3>
-            <div dangerouslySetInnerHTML={{ __html: `${description}` }}></div>
+            <h1 className="text-3xl font-black">{shoe.name}</h1>
+            <div
+              dangerouslySetInnerHTML={{ __html: `${shoe.description}` }}
+            ></div>
           </div>
           <div className="min-h-50px p-5 col-span-3 flex flex-col justify-center items-center">
-            <img src={image} className="w-[full] drop-shadow-lg" />
+            <div>
+              <img
+                src={`http://localhost:4000/${shoe.image.replace(/\\/g, "/")}`}
+                alt="product-image"
+              />
+            </div>
           </div>
           <div className=" min-h-50px flex flex-col items-center space-y-10">
             <div className="grid grid-cols-2 w-full place-items-center gap-5">
               <div className="uppercase font-bold">size</div>
               <div className="uppercase font-bold">
                 <select>
-                  {size.map((range, index) => (
+                  {shoe.size.map((range, index) => (
                     <option key={index}>{range}</option>
                   ))}
                 </select>
@@ -61,18 +83,28 @@ const ProductPage = () => {
 
               <div className="uppercase font-bold">reviews</div>
               <div className="flex">
-                <StarRatingComponent rating={rating} />
+                <StarRatingComponent rating={shoe.rating} />
               </div>
               <div className="uppercase font-bold">price</div>
-              <div>${price}</div>
+              <div>${shoe.price}</div>
               <div className="uppercase font-bold">color</div>
-              <div>{color}</div>
+              <div>
+                <select>
+                  Color
+                  {shoe.color.map((color, index) => (
+                    <option value={color} key={index}>
+                      {color}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <Link to="/cart">
-              <button className="bg-black text-white p-3 px-5">
-                Add to Cart
-              </button>
-            </Link>
+            <button
+              onClick={addToCart}
+              className="bg-black text-white p-3 px-5"
+            >
+              Add to Cart
+            </button>
           </div>
         </div>
       </SectionComponent>

@@ -48,12 +48,14 @@ const UserBarComponent = ({ user }) => {
           </div>
           <div className=" min-h-[50px] flex justify-center items-center gap-4">
             <Link to={`/profile/admin-update/${user._id}`}>
-              <button className="bg-blue-500 p-2">Update</button>
+              <button className="bg-blue-500 p-2 rounded-md text-white">
+                Update
+              </button>
             </Link>
 
             <button
               onClick={() => deleteSpecificUser(user._id)}
-              className="bg-red-500 p-2"
+              className="bg-red-500 p-2 rounded-md text-white"
             >
               Delete
             </button>
