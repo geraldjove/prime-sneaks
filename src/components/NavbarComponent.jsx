@@ -2,10 +2,13 @@ import React, { useContext, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import UserContext from "../UserContext";
+import { RiCloseLargeFill } from "react-icons/ri";
+import { FaBars } from "react-icons/fa";
 
 const NavbarComponent = () => {
   const { user } = useContext(UserContext);
   const [firstName, setFirstName] = useState("");
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -37,9 +40,17 @@ const NavbarComponent = () => {
     fetchUserDetails();
   }, [firstName]);
 
+  const toggleActive = (e) => {
+    if (isActive == false) {
+      setIsActive(true);
+    } else if (isActive == true) {
+      setIsActive(false);
+    }
+  };
+
   return (
-    <nav className=" w-full h-[50px] bg-background">
-      <div className="container h-full mx-auto flex items-center uppercase font-bold text-sm">
+    <nav className=" w-full h-[50px] bg-green-500">
+      <div className="container h-full mx-auto flex items-center uppercase font-bold text-sm px-5">
         <div>
           <NavLink to="/">
             <h1>
@@ -47,6 +58,16 @@ const NavbarComponent = () => {
             </h1>
           </NavLink>
         </div>
+        {/* Mobile Size */}
+        <div className="sm:hidden ms-auto">
+          {isActive ? (
+            <RiCloseLargeFill onClick={toggleActive} className="relative" />
+          ) : (
+            <FaBars onClick={toggleActive} />
+          )}
+        </div>
+
+        {/* Desktop Size */}
         <div className="sm:flex hidden w-[90%] mx-auto">
           <div className="flex space-x-5">
             <NavLink to="/">
