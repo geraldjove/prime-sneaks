@@ -17,6 +17,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import EditProductPage from "./pages/EditProductPage";
 import { UserProvider } from "./UserContext";
 import AddProductPage from "./pages/AddProductPage";
+import NewNavbarComponent from "./components/NewNavbarComponent";
 
 const App = () => {
   const [shoes, setShoes] = useState([]);
@@ -235,7 +236,7 @@ const App = () => {
           deleteProduct,
         }}
       >
-        <NavbarComponent />
+        <NewNavbarComponent />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ProductsPage />} />

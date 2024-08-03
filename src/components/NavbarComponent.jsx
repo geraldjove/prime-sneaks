@@ -68,7 +68,7 @@ const NavbarComponent = () => {
         </div>
 
         {/* Desktop Size */}
-        <div className="sm:flex hidden w-[90%] mx-auto">
+        <div className="sm:flex w-[90%] mx-auto">
           <div className="flex space-x-5">
             <NavLink to="/">
               <h1>Home</h1>
