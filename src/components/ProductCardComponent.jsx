@@ -18,14 +18,22 @@ const ProductCardComponent = ({ limit }) => {
             className="border-2 max-w-full bg-white min-h-full rounded-lg p-5 flex flex-col justify-center items-center"
           >
             <div className="max-h-[200px] min-h-[200px] flex justify-center">
-              <img
-                src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
-                  /\\/g,
-                  "/"
-                )}`} // Adjust the path
-                alt={shoe.index}
-                className="w-full object-cover"
-              />
+              {shoe.image !== null && shoe.image !== "null" ? (
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                    /\\/g,
+                    "/"
+                  )}`}
+                  alt={shoe.index}
+                  className="w-full object-cover"
+                />
+              ) : (
+                <img
+                  src={shoe.imageUrl}
+                  className="w-full object-cover"
+                  alt={shoe.index}
+                />
+              )}
             </div>
             <div className="min-h-[150px] max-h-[150px] flex flex-col justify-end items-center space-y-2 p-2 overflow-hidden">
               <h3 className="sm:text-md text-center font-bold my-auto">

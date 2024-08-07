@@ -82,6 +82,8 @@ const CartPage = () => {
     return <p>Loading...</p>;
   }
 
+  console.log(cart);
+
   return (
     <SectionComponent>
       <div className="space-y-3">
@@ -106,6 +108,7 @@ const CartPage = () => {
                     key={index}
                     productId={cart.productId}
                     image={cart.productImage}
+                    imageUrl={cart.productImageUrl}
                     name={cart.name}
                     initialQuantity={cart.quantity}
                     initialSubTotal={cart.subTotal}

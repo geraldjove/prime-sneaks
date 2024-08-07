@@ -16,14 +16,22 @@ const TopProductCardComponent = ({ limit }) => {
             className="border-2 max-w-full bg-white min-h-full rounded-lg p-2 flex flex-col justify-center items-center"
           >
             <div className="w-full flex justify-center">
-              <img
-                src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
-                  /\\/g,
-                  "/"
-                )}`} // Adjust the path
-                alt={shoe.index}
-                className="w-full object-cover"
-              />
+              {shoe.image !== null && shoe.image !== "null" ? (
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                    /\\/g,
+                    "/"
+                  )}`} // Adjust the path
+                  alt={shoe.index}
+                  className="w-full object-cover"
+                />
+              ) : (
+                <img
+                  src={`${shoe.imageUrl}`} // Adjust the path
+                  alt={shoe.index}
+                  className="w-full object-cover"
+                />
+              )}
             </div>
             <div className="min-h-[150px] max-h-[150px] flex flex-col justify-end items-center space-y-2 p-2 overflow-hidden">
               <h3 className="sm:text-md text-center font-bold my-auto">

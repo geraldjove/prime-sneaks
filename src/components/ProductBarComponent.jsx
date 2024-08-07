@@ -18,13 +18,18 @@ const ProductBarComponent = ({ shoe, index }) => {
       >
         <div className="grid sm:grid-cols-8">
           <div className=" min-h-[50px] mx-auto flex justify-center items-center">
-            <img
-              src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
-                /\\/g,
-                "/"
-              )}`}
-              className="h-[50px]"
-            />
+            {shoe.image !== null && shoe.image !== "null" ? (
+              <img
+                src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                  /\\/g,
+                  "/"
+                )}`}
+                alt={shoe.index}
+                className="h-[50px]"
+              />
+            ) : (
+              <img src={shoe.imageUrl} className="h-[50px]" alt={shoe.index} />
+            )}
           </div>
           <div className=" min-h-[50px] mx-auto flex justify-center items-center">
             <Link to={`/shop/${shoe._id}`} className="flex gap-2 items-center">

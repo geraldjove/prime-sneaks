@@ -30,8 +30,6 @@ const ProductsBarComponent = () => {
     return <p>Loading</p>;
   }
 
-  console.log(shoes);
-
   return (
     <>
       <div className="border-2 rounded-lg overflow-auto min-h-[100vh] max-h-[100vh]">

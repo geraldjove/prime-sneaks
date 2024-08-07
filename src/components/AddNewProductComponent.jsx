@@ -18,10 +18,12 @@ const AddNewProductComponent = () => {
   const [color, setColor] = useState([]);
   const [addColor, setAddColor] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const [selectStatus, setSelectStatus] = useState("");
+  const [selectStatus, setSelectStatus] = useState(true);
   const [isActive, setIsActive] = useState(true);
   const [isSale, setIsSale] = useState(false);
   const [saleDiscount, setSaleDiscount] = useState(0);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [imageToggle, setImageToggle] = useState(false);
 
   useEffect(() => {
     console.log(selectedRating);
@@ -32,7 +34,15 @@ const AddNewProductComponent = () => {
     } else {
       setIsActive(false);
     }
-  }, [selectedRating]);
+
+    if (image === null) {
+      setImageToggle(false);
+    } else {
+      setImageToggle(true);
+    }
+  }, [selectedRating, imageUrl]);
+
+  console.log(selectStatus);
 
   const applyDiscountPrice = (e) => {
     e.preventDefault();
@@ -90,6 +100,7 @@ const AddNewProductComponent = () => {
     console.log(discountedPrice);
     const product = {
       image,
+      imageUrl,
       name,
       description,
       rating,
@@ -97,12 +108,14 @@ const AddNewProductComponent = () => {
       discountedPrice,
       size,
       color,
-      isActive,
+      isActive: selectStatus,
       isSale,
     };
     console.log(product);
     addProduct(product);
   };
+
+  console.log(selectStatus);
 
   return (
     <div className="flex justify-center items-center">
@@ -118,14 +131,28 @@ const AddNewProductComponent = () => {
               <label className="block">Upload Image</label>
               <input
                 type="file"
-                required
                 className="bg-gray-200 rounded-md w-full"
                 onChange={onChangePicture}
               />
             </div>
-            {image && (
+            <div>
+              <label>URL Image</label>
+              <input
+                onChange={(e) => {
+                  setImageUrl(e.target.value);
+                }}
+                type="text"
+                className="bg-gray-200 rounded-md w-full p-1"
+                placeholder="place image url here"
+              />
+            </div>
+            {imageToggle ? (
               <div>
                 <img src={URL.createObjectURL(image)} className="max-w-full" />
+              </div>
+            ) : (
+              <div>
+                <img src={imageUrl} className="max-w-full" />
               </div>
             )}
           </div>

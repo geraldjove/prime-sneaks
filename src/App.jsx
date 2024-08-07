@@ -56,6 +56,7 @@ const App = () => {
     const formData = new FormData();
 
     formData.append("image", product.image);
+    formData.append("imageUrl", product.imageUrl);
     formData.append("name", product.name);
     formData.append("description", product.description);
     formData.append("rating", product.rating);
@@ -95,6 +96,7 @@ const App = () => {
     const formData = new FormData();
 
     formData.append("image", product.image);
+    formData.append("imageUrl", product.imageUrl);
     formData.append("name", product.name);
     formData.append("description", product.description);
     formData.append("rating", product.rating);
