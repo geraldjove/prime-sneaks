@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../UserContext";
+import { NavLink } from "react-router-dom";
 
 const AddNewProductComponent = () => {
   const { addProduct } = useContext(UserContext);
@@ -292,12 +293,17 @@ const AddNewProductComponent = () => {
 
             <div className="flex justify-around">
               <div className="flex justify-center gap-4">
-                <button className="bg-blue-500 p-2 rounded-md text-white">
+                <button
+                  type="submit"
+                  className="bg-blue-500 p-2 rounded-md text-white"
+                >
                   Add Product
                 </button>
-                <button className="bg-red-500 p-2 rounded-md text-white">
-                  Cancel
-                </button>
+                <NavLink to="/admin-dashboard">
+                  <button className="bg-red-500 p-2 rounded-md text-white">
+                    Cancel
+                  </button>
+                </NavLink>
               </div>
             </div>
           </div>

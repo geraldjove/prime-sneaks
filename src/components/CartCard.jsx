@@ -59,7 +59,11 @@ const CartCard = ({
           },
         }
       );
-      window.alert("Successfully removed product", response);
+      window.alert(
+        "Successfully removed product",
+        response,
+        window.location.reload()
+      );
     } else {
       console.log("cancelled");
     }

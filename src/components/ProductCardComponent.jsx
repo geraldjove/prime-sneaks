@@ -7,6 +7,8 @@ const ProductCardComponent = ({ limit }) => {
   const { id } = useParams();
   const { shoes } = useContext(UserContext);
 
+  console.log(import.meta.env.VITE_API_URL);
+
   return (
     <>
       {Array.isArray(shoes.ok) &&

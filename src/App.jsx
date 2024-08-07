@@ -17,7 +17,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import EditProductPage from "./pages/EditProductPage";
 import { UserProvider } from "./UserContext";
 import AddProductPage from "./pages/AddProductPage";
-import NewNavbarComponent from "./components/NewNavbarComponent";
 
 const App = () => {
   const [shoes, setShoes] = useState([]);
@@ -123,7 +122,11 @@ const App = () => {
       const productParse = await updateProductFetch.json();
       if (productParse) {
         console.log(productParse);
-        window.alert("Successfully updated product!", productParse);
+        window.alert(
+          "Successfully updated product!",
+          productParse,
+          (window.location.href = "/admin-dashboard")
+        );
       } else {
         window.alert("Error updated product!");
       }
@@ -236,7 +239,7 @@ const App = () => {
           deleteProduct,
         }}
       >
-        <NewNavbarComponent />
+        <NavbarComponent />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ProductsPage />} />

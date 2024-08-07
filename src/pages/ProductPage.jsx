@@ -71,6 +71,7 @@ const ProductPage = () => {
                   "/"
                 )}`}
                 alt="product-image"
+                className="drop-shadow-lg"
               />
             </div>
           </div>
