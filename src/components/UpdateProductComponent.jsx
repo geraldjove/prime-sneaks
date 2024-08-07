@@ -24,6 +24,8 @@ const UpdateProductComponent = () => {
   const [isActive, setIsActive] = useState(true);
   const [isSale, setIsSale] = useState(false);
   const [saleDiscount, setSaleDiscount] = useState(0);
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageToggle, setImageToggle] = useState(false);
 
   useEffect(() => {
     const getProductDetail = async () => {
@@ -42,21 +44,30 @@ const UpdateProductComponent = () => {
         if (dataParse.ok) {
           const product = dataParse.ok;
           setShoe(product);
-          setImage(
-            `${import.meta.env.VITE_API_URL}/${product.image.replace(
-              /\\/g,
-              "/"
-            )}`
-          );
-          setName(product.name);
-          setDescription(product.description);
-          setSelectedRating(product.rating);
-          setRating(product.rating);
-          setPrice(product.price);
-          setDiscountedPrice(discountedPrice);
-          setSize(product.size);
-          setColor(product.color);
-          setSelectStatus(product.isActive);
+
+          if (product.image === null || product.image === "null") {
+            setImage(null);
+          } else {
+            setImage(
+              `${import.meta.env.VITE_API_URL}/${product.image.replace(
+                /\\/g,
+                "/"
+              )}`
+            );
+          }
+
+          console.log(product.image);
+
+          setImageUrl(product.imageUrl || "");
+          setName(product.name || "");
+          setDescription(product.description || "");
+          setSelectedRating(product.rating || 0);
+          setRating(product.rating || 0);
+          setPrice(product.price || 0);
+          setDiscountedPrice(product.discountedPrice || 0);
+          setSize(product.size || []);
+          setColor(product.color || []);
+          setSelectStatus(product.isActive ? "true" : "false");
         } else {
           console.log("Error parsing data");
         }
@@ -67,6 +78,8 @@ const UpdateProductComponent = () => {
 
     getProductDetail();
   }, [id]);
+
+  console.log(imageToggle);
 
   const applyDiscountPrice = (e) => {
     e.preventDefault();
@@ -118,6 +131,7 @@ const UpdateProductComponent = () => {
     const product = {
       id,
       image,
+      imageUrl,
       name,
       description,
       rating: selectedRating,
@@ -147,25 +161,31 @@ const UpdateProductComponent = () => {
               <label className="block">Upload Image</label>
               <input
                 type="file"
-                className="bg-gray-200 rounded-md w-full"
                 onChange={onChangePicture}
+                className="bg-gray-200 rounded-md w-full"
               />
             </div>
             <div>
-              {image ? (
-                <img
-                  src={
-                    typeof image === "string"
-                      ? image
-                      : URL.createObjectURL(image)
-                  }
-                  alt="Product"
-                  className="max-w-full"
-                />
-              ) : (
-                <p>No image available</p>
-              )}
+              <label>URL Image</label>
+              <input
+                onChange={(e) => {
+                  setImageUrl(e.target.value);
+                }}
+                type="text"
+                value={imageUrl}
+                className="bg-gray-200 rounded-md w-full p-1"
+                placeholder="place image url here"
+              />
             </div>
+            {imageToggle ? (
+              <div>
+                <img src={URL.createObjectURL(image)} className="max-w-full" />
+              </div>
+            ) : (
+              <div>
+                <img src={imageUrl} className="max-w-full" />
+              </div>
+            )}
           </div>
           <div className="space-y-5 flex flex-col justify-center bg-gray-200 p-5 rounded-lg">
             <div>
@@ -194,7 +214,7 @@ const UpdateProductComponent = () => {
                 <select
                   className="bg-white rounded-md w-full p-2"
                   value={selectedRating}
-                  onChange={(e) => setSelectedRating(e.target.value)}
+                  onChange={(e) => setSelectedRating(Number(e.target.value))}
                 >
                   {[...Array(6)].map((_, index) => (
                     <option key={index} value={index}>
@@ -318,7 +338,7 @@ const UpdateProductComponent = () => {
                   className="bg-white rounded-md w-full p-2"
                   value={saleDiscount}
                   placeholder="%"
-                  onChange={(e) => setSaleDiscount(e.target.value)}
+                  onChange={(e) => setSaleDiscount(Number(e.target.value))}
                 />
                 <button
                   onClick={applyDiscountPrice}

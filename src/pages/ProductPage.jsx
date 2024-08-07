@@ -65,13 +65,22 @@ const ProductPage = () => {
           </div>
           <div className="min-h-50px p-5 col-span-3 flex flex-col justify-center items-center">
             <div>
-              <img
-                src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
-                  /\\/g,
-                  "/"
-                )}`}
-                alt="product-image"
-              />
+              {shoe.image !== null && shoe.image !== "null" ? (
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${shoe.image.replace(
+                    /\\/g,
+                    "/"
+                  )}`}
+                  alt={shoe.index}
+                  className="w-full object-cover"
+                />
+              ) : (
+                <img
+                  src={shoe.imageUrl}
+                  className="w-full object-cover"
+                  alt={shoe.index}
+                />
+              )}
             </div>
           </div>
           <div className=" min-h-50px flex flex-col items-center space-y-10">

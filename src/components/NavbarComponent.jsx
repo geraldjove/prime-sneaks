@@ -1,105 +1,108 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { RiCloseLargeFill } from "react-icons/ri";
+import { FaBars, FaShoppingCart } from "react-icons/fa";
+import { FaB } from "react-icons/fa6";
 import UserContext from "../UserContext";
 
 const NavbarComponent = () => {
   const { user } = useContext(UserContext);
-  const [firstName, setFirstName] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const userDetails = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/details`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access")}`,
-            },
-          }
-        );
+    if (user.isAdmin) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
 
-        if (userDetails) {
-          const data = await userDetails.json();
+    if (user.id != null) {
+      setIsLogged(true);
+    } else {
+      setIsLogged(false);
+    }
+  }, [user]);
 
-          if (data) {
-            setFirstName(data.result.firstName);
-          } else {
-            console.log("error");
-          }
-        } else {
-          setFirstName("");
-        }
-      } catch (error) {
-        console.error("Error ", error);
-      }
-    };
-    fetchUserDetails();
-  }, [firstName]);
+  const toggleNav = (e) => {
+    e.preventDefault();
+    if (isOpen == true) {
+      setIsOpen(false);
+    } else if (isOpen == false) {
+      setIsOpen(true);
+    }
+  };
 
   return (
-    <nav className=" w-full h-[50px] bg-background">
-      <div className="container h-full mx-auto flex items-center uppercase font-bold text-sm">
-        <div>
-          <NavLink to="/">
-            <h1>
-              Prime <span className="underline">Sneaks</span>
-            </h1>
+    <nav className="bg-background min-h-[50px] sm:relative absolute w-full z-10">
+      <div className="container px-4 mx-auto sm:flex pt-3 sm:pt-0 gap-4 min-h-[50px] justify-center items-center">
+        <div className="flex justify-between">
+          <NavLink to="/" className="font-bold uppercase">
+            Prime <span className="underline">Sneaks</span>
+          </NavLink>
+          <button onClick={toggleNav} className="sm:hidden">
+            {isOpen ? <FaBars /> : <RiCloseLargeFill />}
+          </button>
+        </div>
+        <div className={`sm:flex sm:space-x-1 ${isOpen ? "hidden" : "block"}`}>
+          <NavLink to="/" className="block text-center p-3">
+            Home
+          </NavLink>
+          <span className="sm:flex hidden p-3">|</span>
+          <NavLink to="/shop" className="block text-center p-3">
+            Shop
           </NavLink>
         </div>
-        <div className="sm:flex hidden w-[90%] mx-auto">
-          <div className="flex space-x-5">
-            <NavLink to="/">
-              <h1>Home</h1>
-            </NavLink>
-            <span>|</span>
-            <NavLink to="/shop">
-              <h1>Shop</h1>
-            </NavLink>
-          </div>
-          {user.id != null || user.id != undefined ? (
-            <div className="flex space-x-5 ms-auto">
-              {user.isAdmin === true ? (
+        <div
+          className={`sm:flex ms-auto sm:space-x-1 ${
+            isOpen ? "hidden" : "block"
+          }`}
+        >
+          {isLogged ? (
+            <>
+              {isAdmin && (
                 <>
-                  <NavLink to="/admin-dashboard">
-                    <h1>Admin Dashboard</h1>
+                  <NavLink
+                    to="/admin-dashboard"
+                    className="block text-center p-3"
+                  >
+                    Admin Dashboard
                   </NavLink>
-                  <span>|</span>
+                  <span className="sm:flex hidden p-3">|</span>
                 </>
-              ) : (
-                <></>
               )}
-
-              <NavLink to="/profile">
-                <h1>{`Welcome, ${firstName}`}</h1>
+              <NavLink to="/profile" className="block text-center p-3">
+                Welcome, {user.email}
               </NavLink>
-              <span>|</span>
-              <NavLink
-                to="/cart"
-                className="flex justify-center items-center gap-2"
-              >
-                <FaShoppingCart />
-                <h3>Cart</h3>
-              </NavLink>
-            </div>
+              <span className="sm:flex hidden p-3">|</span>
+            </>
           ) : (
-            <div className="flex space-x-5 ms-auto">
-              <NavLink to="/register">
-                <h1>Register</h1>
-              </NavLink>
-              <span>|</span>
-              <NavLink to="/login">
-                <h1>Login</h1>
-              </NavLink>
+            <>
               <NavLink
-                to="/cart"
-                className="flex justify-center items-center gap-2"
+                to="/register"
+                className="flex justify-center items-center text-center gap-2 p-3"
               >
-                <FaShoppingCart />
-                <h3>Cart</h3>
+                Register
               </NavLink>
-            </div>
+              <span className="sm:flex hidden p-3">|</span>
+              <NavLink
+                to="/login"
+                className="flex justify-center items-center text-center gap-2 p-3"
+              >
+                Login
+              </NavLink>
+              <span className="sm:flex hidden p-3">|</span>
+            </>
           )}
+
+          <NavLink
+            to="/cart"
+            className="flex justify-center items-center text-center gap-2 p-3"
+          >
+            <FaShoppingCart />
+            <h3>Cart</h3>
+          </NavLink>
         </div>
       </div>
     </nav>

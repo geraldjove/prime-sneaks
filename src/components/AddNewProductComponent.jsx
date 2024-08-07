@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../UserContext";
+import { NavLink } from "react-router-dom";
 
 const AddNewProductComponent = () => {
   const { addProduct } = useContext(UserContext);
@@ -17,10 +18,12 @@ const AddNewProductComponent = () => {
   const [color, setColor] = useState([]);
   const [addColor, setAddColor] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const [selectStatus, setSelectStatus] = useState("");
+  const [selectStatus, setSelectStatus] = useState(true);
   const [isActive, setIsActive] = useState(true);
   const [isSale, setIsSale] = useState(false);
   const [saleDiscount, setSaleDiscount] = useState(0);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [imageToggle, setImageToggle] = useState(false);
 
   useEffect(() => {
     console.log(selectedRating);
@@ -31,7 +34,15 @@ const AddNewProductComponent = () => {
     } else {
       setIsActive(false);
     }
-  }, [selectedRating]);
+
+    if (image === null) {
+      setImageToggle(false);
+    } else {
+      setImageToggle(true);
+    }
+  }, [selectedRating, imageUrl]);
+
+  console.log(selectStatus);
 
   const applyDiscountPrice = (e) => {
     e.preventDefault();
@@ -89,6 +100,7 @@ const AddNewProductComponent = () => {
     console.log(discountedPrice);
     const product = {
       image,
+      imageUrl,
       name,
       description,
       rating,
@@ -96,12 +108,14 @@ const AddNewProductComponent = () => {
       discountedPrice,
       size,
       color,
-      isActive,
+      isActive: selectStatus,
       isSale,
     };
     console.log(product);
     addProduct(product);
   };
+
+  console.log(selectStatus);
 
   return (
     <div className="flex justify-center items-center">
@@ -117,14 +131,28 @@ const AddNewProductComponent = () => {
               <label className="block">Upload Image</label>
               <input
                 type="file"
-                required
                 className="bg-gray-200 rounded-md w-full"
                 onChange={onChangePicture}
               />
             </div>
-            {image && (
+            <div>
+              <label>URL Image</label>
+              <input
+                onChange={(e) => {
+                  setImageUrl(e.target.value);
+                }}
+                type="text"
+                className="bg-gray-200 rounded-md w-full p-1"
+                placeholder="place image url here"
+              />
+            </div>
+            {imageToggle ? (
               <div>
                 <img src={URL.createObjectURL(image)} className="max-w-full" />
+              </div>
+            ) : (
+              <div>
+                <img src={imageUrl} className="max-w-full" />
               </div>
             )}
           </div>
@@ -292,12 +320,17 @@ const AddNewProductComponent = () => {
 
             <div className="flex justify-around">
               <div className="flex justify-center gap-4">
-                <button className="bg-blue-500 p-2 rounded-md text-white">
+                <button
+                  type="submit"
+                  className="bg-blue-500 p-2 rounded-md text-white"
+                >
                   Add Product
                 </button>
-                <button className="bg-red-500 p-2 rounded-md text-white">
-                  Cancel
-                </button>
+                <NavLink to="/admin-dashboard">
+                  <button className="bg-red-500 p-2 rounded-md text-white">
+                    Cancel
+                  </button>
+                </NavLink>
               </div>
             </div>
           </div>

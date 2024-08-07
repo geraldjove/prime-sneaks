@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import SectionComponent from "../components/SectionComponent";
 import CartCard from "../components/CartCard";
+import UserContext from "../UserContext";
+import Swal from "sweetalert2";
 
 const CartPage = () => {
+  const { user } = useContext(UserContext);
   const [cart, setCart] = useState(null); // Initialize as null for loading state
   const [totalPrice, setTotalPrice] = useState(0);
+  const [cartData, setCartData] = useState(null);
+
+  console.log(cartData);
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -14,7 +20,8 @@ const CartPage = () => {
         },
       });
       const dataCart = await fetchCart.json();
-      setCart(dataCart.ok ? dataCart.ok.cartItems : []); // Assuming dataCart.ok.cartItems is an array
+      setCart(dataCart.ok ? dataCart.ok.cartItems : []);
+      setCartData(dataCart.ok);
       calculateTotalPrice(dataCart.ok ? dataCart.ok.cartItems : []);
     };
     fetchCartData();
@@ -35,9 +42,47 @@ const CartPage = () => {
     calculateTotalPrice(updatedCart);
   };
 
+  const handleOrder = async (e) => {
+    e.preventDefault();
+    const orderResponse = await fetch(
+      `${import.meta.env.VITE_API_URL}/orders`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          productsOrdered: cartData.cartItems,
+          totalPrice: totalPrice,
+        }),
+      }
+    );
+
+    const orderData = await orderResponse.json();
+
+    if (orderResponse) {
+      Swal.fire({
+        title: "Success",
+        text: "Successfully placed order",
+        icon: "success",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    }
+
+    console.log(orderResponse);
+    console.log(orderData);
+  };
+
   if (cart === null) {
     return <p>Loading...</p>;
   }
+
+  console.log(cart);
 
   return (
     <SectionComponent>
@@ -63,6 +108,7 @@ const CartPage = () => {
                     key={index}
                     productId={cart.productId}
                     image={cart.productImage}
+                    imageUrl={cart.productImageUrl}
                     name={cart.name}
                     initialQuantity={cart.quantity}
                     initialSubTotal={cart.subTotal}
@@ -87,7 +133,10 @@ const CartPage = () => {
                 <h3>Taxes and shipping calculated at checkout.</h3>
               </div>
               <div>
-                <button className="bg-blue-500 p-5 px-10 w-full text-white">
+                <button
+                  onClick={handleOrder}
+                  className="bg-blue-500 p-5 px-10 w-full text-white"
+                >
                   Checkout
                 </button>
               </div>

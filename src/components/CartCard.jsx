@@ -5,6 +5,7 @@ import { IoMdClose } from "react-icons/io";
 const CartCard = ({
   productId,
   image,
+  imageUrl,
   name,
   initialQuantity,
   initialSubTotal,
@@ -59,20 +60,31 @@ const CartCard = ({
           },
         }
       );
-      window.alert("Successfully removed product", response);
+      window.alert(
+        "Successfully removed product",
+        response,
+        window.location.reload()
+      );
     } else {
       console.log("cancelled");
     }
   };
-
   return (
     <div className="min-h-[100px] border-b border-gray-300 px-2">
       <div className="grid sm:grid-cols-3">
         <div className="min-h-[100px] flex items-center gap-4">
-          <img
-            src={`${import.meta.env.VITE_API_URL}/${image.replace(/\\/g, "/")}`}
-            className="max-w-[50px]"
-          />
+          {image !== null && image !== "null" ? (
+            <img
+              src={`${import.meta.env.VITE_API_URL}/${image.replace(
+                /\\/g,
+                "/"
+              )}`}
+              className="max-w-[50px]"
+            />
+          ) : (
+            <img src={imageUrl} className="max-w-[50px]" />
+          )}
+
           <h1 className="font-bold">{name}</h1>
         </div>
         <div className="bg-gray-100 min-h-[100px] flex justify-center items-center gap-2">
