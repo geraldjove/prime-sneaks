@@ -33,19 +33,23 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchShoesData = await fetch(
-        `${import.meta.env.VITE_API_URL}/products`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      try {
+        const fetchShoesData = await fetch(
+          `${import.meta.env.VITE_API_URL}/products`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await fetchShoesData.json();
+        if (data) {
+          setShoes(data);
+        } else {
+          console.log("Error fetching data");
         }
-      );
-      const data = await fetchShoesData.json();
-      if (data) {
-        setShoes(data);
-      } else {
-        console.log("Error fetching data");
+      } catch (error) {
+        console.log("Error " + error);
       }
     };
     fetchData();
