@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import SectionComponent from "../components/SectionComponent";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import UserContext from "../UserContext";
 
@@ -130,7 +130,9 @@ const LoginPage = () => {
           </form>
           <p>
             Don't have an account yet?{" "}
-            <span className="text-blue-500 font-medium">Sign up</span>
+            <NavLink to={"/register"} className="text-blue-500 font-medium">
+              Sign up
+            </NavLink>
           </p>
         </div>
       </div>

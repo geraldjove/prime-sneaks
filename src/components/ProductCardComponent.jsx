@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import UserContext from "../UserContext";
 import StarRatingComponent from "./StarRatingComponent";
@@ -6,8 +6,6 @@ import StarRatingComponent from "./StarRatingComponent";
 const ProductCardComponent = ({ limit }) => {
   const { id } = useParams();
   const { shoes } = useContext(UserContext);
-
-  console.log(import.meta.env.VITE_API_URL);
 
   return (
     <>

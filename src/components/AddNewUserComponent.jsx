@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SectionComponent from "../components/SectionComponent";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const AddNewUserComponent = () => {
   const navigate = useNavigate();
@@ -190,7 +190,12 @@ const AddNewUserComponent = () => {
             </button>
           </div>
         </form>
-        <p>Already have an account? Login here</p>
+        <p>
+          Already have an account?{" "}
+          <NavLink to={"/login"} className={"text-blue-500 font-bold"}>
+            Login here
+          </NavLink>
+        </p>
       </div>
     </div>
   );
